@@ -2,7 +2,7 @@ require 'win32ole'
 require 'ftools'
 
 module Updater  
-  def Updater.update(all_hash)  
+  def Updater.update(all_hash)
     now = DateTime::now()
     
     # create a backup copy first
@@ -35,12 +35,10 @@ module Updater
     # update "PORTFEL" worksheet
     ws = workbook.Worksheets('PORTFEL')
     
-    # TODO: auto find cells to update
-    
     all_hash.each {|key, value| 
       find_and_update(ws, key, value)
     }
-   
+=begin
     i = all_hash["Investor FIZ"]
     ws.Range("F5").Value = i.price
     ws.Range("G5").Value = i.date    
@@ -48,7 +46,7 @@ module Updater
     i = all_hash["Investor Gold FIZ"]
     ws.Range("F8").Value = i.price
     ws.Range("G8").Value = i.date 
-=begin     
+
     i = all_hash["USD"]
     ws.Range("F16").Value = i.price
     ws.Range("G16").Value = i.date    
@@ -134,31 +132,31 @@ module Updater
       # [ticker] xxx (sr) 
       if v =~ /\[([A-Z0-9]+)\].+\(sr\)/
         if $1 == key
-#          p key + "-> C"+i.to_s
+          #          p key + "-> C"+i.to_s
           ws.Range("F" + i.to_s).Value = item.price
           ws.Range("G" + i.to_s).Value = item.date
           break
         end
-        # [ticker] (sr)
-      elsif v =~ /([A-Z0-9]+)\ \(sr\)/
+        # xxx (sr)
+      elsif v =~ /([\w\ ]+)\ \(sr\)/
         if $1 == key
-#          p key + "-> C"+i.to_s
+          #          p key + "-> C"+i.to_s
           ws.Range("F" + i.to_s).Value = item.price
           ws.Range("G" + i.to_s).Value = item.date
           break
-        end
+        end        
         # [ticker] xxx
       elsif v =~ /\[([A-Z0-9]+)\].*/
         if $1 == key
-#          p key + "-> C"+i.to_s
+          #          p key + "-> C"+i.to_s
           ws.Range("F" + i.to_s).Value = item.price
           ws.Range("G" + i.to_s).Value = item.date
           break
         end
         # xxx
-      elsif v =~ /[A-Z0-9]+/
+      elsif v =~ /[\w\ ]+/
         if $& == key
-#          p key + "-> C"+i.to_s
+          #          p key + "-> C"+i.to_s
           ws.Range("F" + i.to_s).Value = item.price
           ws.Range("G" + i.to_s).Value = item.date
           break
@@ -166,4 +164,4 @@ module Updater
       end
     }
   end
-end  
+end
