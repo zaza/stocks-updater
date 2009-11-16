@@ -74,6 +74,10 @@ module Updater
     i = all_hash["UniFundusze FIO Sub. UniAkcje: Polska 2012"]
     ws.Range("F43").Value = i.price
     ws.Range("G43").Value = i.date
+    
+    i = all_hash["UniFundusze FIO Sub. UniDolar Obligacje"]
+    ws.Range("F44").Value = i.price
+    ws.Range("G44").Value = i.date    
 =begin    
     i = all_hash["ARKAFRN12"]
     ws.Range("F47").Value = i.price

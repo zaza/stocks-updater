@@ -21,7 +21,8 @@ funds = [
 "Legg Mason Akcji FIO", 
 "PZU FIO Akcji MiŚ Spółek",
 "UniFundusze FIO Sub. UniAkcje MiŚS",
-"UniFundusze FIO Sub. UniAkcje: Polska 2012" ];
+"UniFundusze FIO Sub. UniAkcje: Polska 2012",
+"UniFundusze FIO Sub. UniDolar Obligacje"];
 stooqs = [ "ARKAFRN12", "RCCRUAOPEN"]
 tickers = [ "BMP", "COG", "INK", "IPL", "KGH", "RHD", "VST", "ZAP" ]
 currencies = [ "USD", "AUD" ]
@@ -33,7 +34,7 @@ tickers_hash = {}
 currencies_hash = {}
 investors_hash = {}
 
-page = open("http://www.bankier.pl/inwestowanie/notowania/fundusze/").read
+page = open("http://www.bankier.pl/inwestowanie/notowania/fundusze/?aktywny=7").read
 page = Iconv.iconv('utf-8','iso-8859-2',page).first
 doc = Hpricot(page)
 doc.search("//tr/td/a[@class='atl']").each do |a|
