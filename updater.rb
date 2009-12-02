@@ -6,7 +6,8 @@ module Updater
     now = DateTime::now()
     
     # create a backup copy first
-    File.copy("p:/docs/homebanking/portfel.xls", "p:/docs/homebanking/portfel"+now.year.to_s+now.month.to_s+now.day.to_s+".bak")
+    date = now.strftime("%Y%m%d") 
+    File.copy("p:/docs/homebanking/portfel.xls", "p:/docs/homebanking/portfel" + date + ".bak")
     
     excel = WIN32OLE.new('Excel.Application')
     #excel.Visible = true
