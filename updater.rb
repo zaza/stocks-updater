@@ -39,23 +39,7 @@ module Updater
     all_hash.each {|key, value| 
       find_and_update(ws, key, value)
     }
-=begin
-    i = all_hash["Investor FIZ"]
-    ws.Range("F5").Value = i.price
-    ws.Range("G5").Value = i.date    
-    
-    i = all_hash["Investor Gold FIZ"]
-    ws.Range("F8").Value = i.price
-    ws.Range("G8").Value = i.date 
 
-    i = all_hash["USD"]
-    ws.Range("F16").Value = i.price
-    ws.Range("G16").Value = i.date    
-    
-    i = all_hash["AUD"]
-    ws.Range("F19").Value = i.price
-    ws.Range("G19").Value = i.date    
-=end    
     i = all_hash["Amplico SFIO Parasol Świat. Sub. Akcji Chińskich i Azj."]
     ws.Range("F34").Value = i.price
     ws.Range("G34").Value = i.date
@@ -79,47 +63,6 @@ module Updater
     i = all_hash["UniFundusze FIO Sub. UniDolar Obligacje"]
     ws.Range("F44").Value = i.price
     ws.Range("G44").Value = i.date    
-=begin    
-    i = all_hash["ARKAFRN12"]
-    ws.Range("F47").Value = i.price
-    ws.Range("G47").Value = i.date
-    
-    i = all_hash["BMP"]
-    ws.Range("F50").Value = i.price
-    ws.Range("G50").Value = i.date
-    
-    i = all_hash["COG"]
-    ws.Range("F53").Value = i.price
-    ws.Range("G53").Value = i.date
-    
-    i = all_hash["INK"]
-    ws.Range("F56").Value = i.price
-    ws.Range("G56").Value = i.date
-    
-    i = all_hash["IPL"]
-    ws.Range("F57").Value = i.price
-    ws.Range("G57").Value = i.date
-    
-    i = all_hash["KGH"]
-    ws.Range("F58").Value = i.price
-    ws.Range("G58").Value = i.date
-    
-    i = all_hash["RHD"]
-    ws.Range("F59").Value = i.price
-    ws.Range("G59").Value = i.date
-    
-    i = all_hash["VST"]
-    ws.Range("F63").Value = i.price
-    ws.Range("G63").Value = i.date
-    
-    i = all_hash["ZAP"]
-    ws.Range("F64").Value = i.price
-    ws.Range("G64").Value = i.date
-    
-    i = all_hash["RCCRUAOPEN"]
-    ws.Range("F65").Value = i.price
-    ws.Range("G65").Value = i.date
-=end
     
     #excel.ScreenUpdating = true
     
@@ -137,7 +80,6 @@ module Updater
       # [ticker] xxx (sr) 
       if v =~ /\[([A-Z0-9]+)\].+\(sr\)/
         if $1 == key
-          #          p key + "-> C"+i.to_s
           ws.Range("F" + i.to_s).Value = item.price
           ws.Range("G" + i.to_s).Value = item.date
           break
@@ -145,7 +87,6 @@ module Updater
         # xxx (sr)
       elsif v =~ /([\w\ ]+)\ \(sr\)/
         if $1 == key
-          #          p key + "-> C"+i.to_s
           ws.Range("F" + i.to_s).Value = item.price
           ws.Range("G" + i.to_s).Value = item.date
           break
@@ -153,7 +94,6 @@ module Updater
         # [ticker] xxx
       elsif v =~ /\[([A-Z0-9]+)\].*/
         if $1 == key
-          #          p key + "-> C"+i.to_s
           ws.Range("F" + i.to_s).Value = item.price
           ws.Range("G" + i.to_s).Value = item.date
           break
@@ -161,7 +101,6 @@ module Updater
         # xxx
       elsif v =~ /[\w\ ]+/
         if $& == key
-          #          p key + "-> C"+i.to_s
           ws.Range("F" + i.to_s).Value = item.price
           ws.Range("G" + i.to_s).Value = item.date
           break
