@@ -6,7 +6,6 @@ require 'iconv'
 require 'item'
 require 'updater'
 
-# TODO: pick "N" as default after 2 secs
 print "Print names [yN]: "
 if gets.chomp == "y" then
   Item.print_names(true)
@@ -95,16 +94,15 @@ doc.search("//p[@class='std-b2']").each do |p|
   end
 end
 
-doc = Hpricot(open("http://www.investors.pl"))
-span = doc.at("//span[@class='dates']")
-if span.inner_html =~ /(Wycena certyfikatów na dzień )(\d{4}-\d{2}-\d{2})/
-  date = $2
-  div = doc.at("//div[@class='table_bg']")
-  div.search("/table/tr/td[@class='l']/a").each do |a|
-    inv = a.inner_html
+doc = Hpricot(open("http://tfi.investors.pl"))
+td = doc.at("//div[@id='assets_pricing']/table/tr[@class='first']/td[@class='r']")
+if td.inner_html =~ /\d{4}-\d{2}-\d{2}/
+  date = $&
+  trs = doc.search("//div[@id='assets_pricing']/table/tr[@class='name']")
+  for tr in trs
+    inv = tr.at("/td[@class='l']").inner_html
     if investors.include?(inv)
-      #<strong>2614.86 zł</strong>
-      if a.parent.next_sibling.inner_html =~ /\d+\.\d+/
+      if tr.at("/td[@class='r']").inner_html =~ /\d+\.\d+/
         investors_hash[inv] = Item.new(inv, $&.gsub("." , ","), date)
       end
     end
