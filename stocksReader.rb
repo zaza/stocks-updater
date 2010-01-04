@@ -6,11 +6,6 @@ require 'iconv'
 require 'item'
 require 'updater'
 
-print "Print names [yN]: "
-if gets.chomp == "y" then
-  Item.print_names(true)
-end
-
 puts "Fetching data. Please wait..."
 
 now = DateTime::now()
@@ -22,8 +17,8 @@ funds = [
 "UniFundusze FIO Sub. UniAkcje MiŚS",
 "UniFundusze FIO Sub. UniAkcje: Polska 2012",
 "UniFundusze FIO Sub. UniDolar Obligacje"];
-stooqs = [ "ARKAFRN12", "RCCRUAOPEN"]
-tickers = [ "BMP", "COG", "INK", "IPL", "KGH", "RHD", "VST", "ZAP" ]
+stooqs = [ "ARKAFRN12", "RCCRUAOPEN", "RCGLDAOPEN"]
+tickers = [ "BMP", "COG", "INK", "IPL", "RHD", "VST", "ZAP" ]
 currencies = [ "USD", "AUD" ]
 investors = ["Investor FIZ", "Investor Gold FIZ"]
 
@@ -124,4 +119,6 @@ if gets.chomp == "y" then
   all_hash = all_hash.merge(currencies_hash)
   all_hash = all_hash.merge(investors_hash)
   Updater.update(all_hash)
+else
+  p "Bye."
 end
