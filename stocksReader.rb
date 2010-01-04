@@ -35,7 +35,7 @@ doc.search("//tr/td/a[@class='atl']").each do |a|
   fund = a.inner_html
   if funds.include?(fund)
     price = a.parent.parent.search("/td")[2].inner_html
-    if price =~ /[0-9]+\.[0-9]{2}/
+    if price =~ /[0-9]+(\.[0-9]{2})*/
       price = $&.gsub("." , ",")
       date = a.parent.parent.search("/td")[9].inner_html
       if date =~ /[0-9]{2}-[0-9]{2}/
@@ -120,5 +120,5 @@ if gets.chomp == "y" then
   all_hash = all_hash.merge(investors_hash)
   Updater.update(all_hash)
 else
-  p "Bye."
+  print "Bye."
 end
