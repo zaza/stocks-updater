@@ -41,28 +41,28 @@ module Updater
     }
 
     i = all_hash["Amplico SFIO Parasol Świat. Sub. Akcji Chińskich i Azj."]
-    ws.Range("F34").Value = i.price
-    ws.Range("G34").Value = i.date
+    ws.Range("F35").Value = i.price
+    ws.Range("G35").Value = i.date
     
     i = all_hash["Legg Mason Akcji FIO"]
-    ws.Range("F38").Value = i.price
-    ws.Range("G38").Value = i.date
+    ws.Range("F39").Value = i.price
+    ws.Range("G39").Value = i.date
     
     i = all_hash["PZU FIO Akcji MiŚ Spółek"]
-    ws.Range("F41").Value = i.price
-    ws.Range("G41").Value = i.date
-    
-    i = all_hash["UniFundusze FIO Sub. UniAkcje MiŚS"]
     ws.Range("F42").Value = i.price
     ws.Range("G42").Value = i.date
     
-    i = all_hash["UniFundusze FIO Sub. UniAkcje: Polska 2012"]
+    i = all_hash["UniFundusze FIO Sub. UniAkcje MiŚS"]
     ws.Range("F43").Value = i.price
     ws.Range("G43").Value = i.date
     
-    i = all_hash["UniFundusze FIO Sub. UniDolar Obligacje"]
+    i = all_hash["UniFundusze FIO Sub. UniAkcje: Polska 2012"]
     ws.Range("F44").Value = i.price
-    ws.Range("G44").Value = i.date    
+    ws.Range("G44").Value = i.date
+    
+    i = all_hash["UniFundusze FIO Sub. UniDolar Obligacje"]
+    ws.Range("F45").Value = i.price
+    ws.Range("G45").Value = i.date    
     
     #excel.ScreenUpdating = true
     
