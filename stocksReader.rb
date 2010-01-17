@@ -16,7 +16,8 @@ funds = [
 "PZU FIO Akcji MiŚ Spółek",
 "UniFundusze FIO Sub. UniAkcje MiŚS",
 "UniFundusze FIO Sub. UniAkcje: Polska 2012",
-"UniFundusze FIO Sub. UniDolar Obligacje"];
+#"UniFundusze FIO Sub. UniDolar Obligacje"];
+"UniFundusze FIO Sub. UniKorona Akcje"];
 stooqs = [ "ARKAFRN12", "RCCRUAOPEN", "RCGLDAOPEN"]
 tickers = [ "BMP", "COG", "INK", "IPL", "RHD", "VST", "ZAP" ]
 currencies = [ "USD", "AUD" ]

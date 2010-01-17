@@ -60,7 +60,7 @@ module Updater
     ws.Range("F44").Value = i.price
     ws.Range("G44").Value = i.date
     
-    i = all_hash["UniFundusze FIO Sub. UniDolar Obligacje"]
+    i = all_hash["UniFundusze FIO Sub. UniKorona Akcje"]
     ws.Range("F45").Value = i.price
     ws.Range("G45").Value = i.date    
     
