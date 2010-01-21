@@ -10,13 +10,14 @@ puts "Fetching data. Please wait..."
 
 now = DateTime::now()
 
-funds = [ 
+funds = [
 "Amplico SFIO Parasol Świat. Sub. Akcji Chińskich i Azj.",
-"Legg Mason Akcji FIO", 
+"Legg Mason Akcji FIO",
 "PZU FIO Akcji MiŚ Spółek",
 "UniFundusze FIO Sub. UniAkcje MiŚS",
 "UniFundusze FIO Sub. UniAkcje: Polska 2012",
 #"UniFundusze FIO Sub. UniDolar Obligacje"];
+"UniFundusze FIO Sub. UniAkcje: NE",
 "UniFundusze FIO Sub. UniKorona Akcje"];
 stooqs = [ "ARKAFRN12", "RCCRUAOPEN", "RCGLDAOPEN"]
 tickers = [ "BMP", "COG", "INK", "IPL", "RHD", "VST", "ZAP" ]
@@ -70,8 +71,10 @@ doc.search("//tr[@id='noto']").each do |tr|
         tickers_hash[ticker] = Item.new(ticker, price, now.year.to_s + "-" + date)
       end
     end
-  end  
+  end
 end
+
+#TODO: replace it with walutomat.pl
 
 doc = Hpricot(open("http://baksy.pl/kantor/kursy.php3"))
 doc.search("//p[@class='std-b2']").each do |p|
@@ -84,7 +87,7 @@ doc.search("//p[@class='std-b2']").each do |p|
           price = Float(buy)
           currencies_hash[$2] = Item.new($2, (price/100).to_s.gsub("." , ","), date)
         end
-      end  
+      end
     end
     break
   end
