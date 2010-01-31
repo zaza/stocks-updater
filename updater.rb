@@ -41,12 +41,16 @@ module Updater
     }
 
     i = all_hash["Amplico SFIO Parasol Świat. Sub. Akcji Chińskich i Azj."]
-    ws.Range("F36").Value = i.price
-    ws.Range("G36").Value = i.date
+    ws.Range("F42").Value = i.price
+    ws.Range("G42").Value = i.date
 
     i = all_hash["PZU FIO Akcji MiŚ Spółek"]
-    ws.Range("F43").Value = i.price
-    ws.Range("G43").Value = i.date
+    ws.Range("F49").Value = i.price
+    ws.Range("G49").Value = i.date
+
+    i = all_hash["UniFundusze FIO Sub. UniAkcje MiŚS"]
+    ws.Range("F50").Value = i.price
+    ws.Range("G50").Value = i.date
 
     #excel.ScreenUpdating = true
     
