@@ -1,7 +1,15 @@
 require 'win32ole'
 require 'ftools'
 
-module Updater  
+module Updater
+
+  class String
+    def starts_with?(prefix)
+      prefix = prefix.to_s
+      self[0, prefix.length] == prefix
+    end
+  end
+
   def Updater.update(all_hash)
     now = DateTime::now()
 
@@ -15,6 +23,8 @@ module Updater
     #excel.ScreenUpdating = false
 
     workbook = excel.Workbooks.Open("p:/docs/homebanking/portfel.xls")
+
+    WIN32OLE.codepage = WIN32OLE::CP_UTF8
 
     # update "historia" worksheet
     ws = workbook.Worksheets('historia')
@@ -40,18 +50,6 @@ module Updater
       find_and_update(ws, key, value)
     }
 
-    i = all_hash["Amplico SFIO Parasol Świat. Sub. Akcji Chińskich i Azj."]
-    ws.Range("F46").Value = i.price
-    ws.Range("G46").Value = i.date
-
-    i = all_hash["PZU FIO Akcji MiŚ Spółek"]
-    ws.Range("F53").Value = i.price
-    ws.Range("G53").Value = i.date
-
-    i = all_hash["UniFundusze FIO Sub. UniAkcje MiŚS"]
-    ws.Range("F54").Value = i.price
-    ws.Range("G54").Value = i.date
-
     #excel.ScreenUpdating = true
     
     workbook.Save
@@ -59,8 +57,12 @@ module Updater
     excel.Quit
 
     puts "Done."
-  end  
+  end
+
   def Updater.find_and_update(ws, key, item)
+    print "Looking for '" + key + "'... "
+    $\ = "\n"
+
     v = ""
     100.downto(1) {|i|
       # column C
@@ -70,6 +72,8 @@ module Updater
         if $1 == key
           ws.Range("F" + i.to_s).Value = item.price
           ws.Range("G" + i.to_s).Value = item.date
+          print "(1) found at " + i.to_s
+          $\ = nil
           break
         end
         # <long name> (sr)
@@ -77,6 +81,8 @@ module Updater
         if $1 == key
           ws.Range("F" + i.to_s).Value = item.price
           ws.Range("G" + i.to_s).Value = item.date
+          print "(2) found at " + i.to_s
+          $\ = nil
           break
         end
         # [<short name>] <long name>
@@ -84,6 +90,8 @@ module Updater
         if $1 == key
           ws.Range("F" + i.to_s).Value = item.price
           ws.Range("G" + i.to_s).Value = item.date
+          print "(3) found at " + i.to_s
+          $\ = nil
           break
         end
         # <long name>
@@ -91,6 +99,8 @@ module Updater
         if $& == key
           ws.Range("F" + i.to_s).Value = item.price
           ws.Range("G" + i.to_s).Value = item.date
+          print "(4) found at " + i.to_s
+          $\ = nil
           break
         end
       end
