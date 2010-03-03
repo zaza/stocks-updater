@@ -31,7 +31,6 @@ module Updater
 
     cell_data = ws.Cells(2,1)
     cell_razem = ws.Cells(2,2)
-    cell_tomek = ws.Cells(2,3)
 
     ws.Rows(3).Insert
 
@@ -39,9 +38,8 @@ module Updater
     cell_data.Value = now.year.to_s + "-" + now.month.to_s + "-" + now.day.to_s
 
     ws.Cells(3,2).Value=cell_razem.Value
-    ws.Cells(3,3).Value=cell_tomek.Value
-    ws.Cells(3,4).Formula = "=(B3-B4)/B3"
-    ws.Cells(2,4).Formula = "=(B2-B3)/B2"
+    ws.Cells(3,3).Formula = "=(B3-B4)/B3"
+    ws.Cells(2,3).Formula = "=(B2-B3)/B2"
 
     # update "PORTFEL" worksheet
     ws = workbook.Worksheets('PORTFEL')
