@@ -2,6 +2,8 @@ require 'rubygems'
 require 'hpricot'
 require 'open-uri'
 require 'iconv'
+require 'net/https'
+require 'uri'
 
 require 'item'
 require 'updater'
@@ -16,13 +18,14 @@ funds = [
 "PZU FIO Akcji MiŚ Spółek",
 "UniFundusze FIO Sub. UniAkcje MiŚS",
 "UniFundusze FIO Sub. UniAkcje: Polska 2012",
-"UniFundusze FIO Sub. UniDolar Obligacje"];
-#"UniFundusze FIO Sub. UniAkcje: NE"];
-#"UniFundusze FIO Sub. UniKorona Akcje"];
+"UniFundusze FIO Sub. UniDolar Obligacje",
+"Amplico FIO Parasol Kraj. Sub. Pieniężny",
+"UniFundusze FIO Sub. UniKorona Pieniężny"];
 stooqs = [ "ARKAFRN12", "RCCRUAOPEN", "RCGLDAOPEN"]
 tickers = [ "BMP", "COG", "INK", "IPL", "RHD", "VST", "ZAP" ]
 currencies = [ "USD", "AUD", "EUR" ]
 investors = ["Investor FIZ", "Investor Gold FIZ"]
+#TODO: silver
 
 funds_hash = {}
 stooqs_hash = {}
@@ -74,8 +77,6 @@ doc.search("//tr[@id='noto']").each do |tr|
   end
 end
 
-#TODO: replace it with walutomat.pl
-
 doc = Hpricot(open("http://baksy.pl/kantor/kursy.php3"))
 doc.search("//p[@class='std-b2']").each do |p|
   if p.inner_html =~ /\d{4}-\d{2}-\d{2}/
@@ -92,6 +93,27 @@ doc.search("//p[@class='std-b2']").each do |p|
     break
   end
 end
+
+#TODO: run walutomat.pl first and skip found currencies on baksy.pl
+uri = URI.parse(ARGV[0] || 'https://www.walutomat.pl/')
+http = Net::HTTP.new(uri.host, uri.port)
+http.use_ssl = true if uri.scheme == "https"  # enable SSL/TLS
+http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+http.start {
+  http.request_get(uri.path) {|res|
+    doc = Hpricot(res.body)
+    doc.search("//div[@id='obecny-kurs']/table/tr/td[@name='pair']/a").each do |a|
+    if a.inner_html =~ /([A-Z]{3})\ \/\ PLN/
+      if currencies.include?($1)
+        rate = a.parent.next_sibling.inner_html
+        price = Float(rate)
+        currencies_hash[$1] = Item.new($1, price.to_s.gsub("." , ","), now.strftime("%Y-%m-%d"))
+        #currencies.delete($1) #FIXME: don't look for it on baksy.pl
+      end
+    end
+  end
+  }
+}
 
 doc = Hpricot(open("http://tfi.investors.pl"))
 td = doc.at("//div[@id='assets_pricing']/table/tr[@class='first']/td[@class='r']")
