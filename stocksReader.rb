@@ -22,7 +22,7 @@ funds = [
 "Amplico FIO Parasol Kraj. Sub. Pieniężny",
 "UniFundusze FIO Sub. UniKorona Pieniężny"];
 stooqs = [ "ARKAFRN12", "RCSCRAOPEN", "RCGLDAOPEN"]
-tickers = [ "BMP", "COG", "INK", "IPL", "RHD", "VST", "ZAP" ]
+tickers = [ "BMP", "COG", "INK", "IPL", "RHD", "VST", "ZAP", "TPS" ]
 currencies = [ "USD", "AUD", "EUR" ]
 investors = ["Investor FIZ", "Investor Gold FIZ"]
 coins = ["silver eagle"]
