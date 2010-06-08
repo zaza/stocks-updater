@@ -21,12 +21,12 @@ funds = [
 "UniFundusze FIO Sub. UniDolar Obligacje",
 "Amplico FIO Parasol Kraj. Sub. Pieniężny",
 "UniFundusze FIO Sub. UniKorona Pieniężny"];
-stooqs = [ "ARKAFRN12", "RCSCRAOPEN", "RCGLDAOPEN"]
+#RCSILAOPEN = monety, uncja srebra w pln
+stooqs = [ "ARKAFRN12", "RCSCRAOPEN", "RCGLDAOPEN", "RCSILAOPEN"]
 tickers = [ "BMP", "COG", "INK", "IPL", "RHD", "VST", "ZAP", "TPS" ]
 currencies = [ "USD", "AUD", "EUR" ]
 investors = ["Investor FIZ", "Investor Gold FIZ"]
 coins = ["silver eagle"]
-#TODO: silver, najlepsza cena z http://baksy.pl/zlom.php3 albo http://www.acclamatio.pl/index.php
 
 funds_hash = {}
 stooqs_hash = {}
@@ -131,8 +131,8 @@ if td.inner_html =~ /\d{4}-\d{2}-\d{2}/
   end
 end
 
-#http://www.allegro.pl/listing/search.php?category=85&from_showcat=1&string=silver+eagle&price_from=&price_to=&postcode_enabled=0&state=0&distance=1&postcode=&city=&buy=1&listing=0&listing_sel=2&listing_interval=7&view=gtext&order=t&clear_cookie=0&change_view=Poka%C5%BC
-#odrzuc najnizsze i najwyzsze, usrednij, uzyj daty zapytania; a moze mediana?
+#1) silver, najlepsza cena z http://baksy.pl/zlom.php3 albo http://www.acclamatio.pl/index.php
+#2) RCSILAOPEN = monety, uncja srebra w pln
 
 funds.each { |i| puts funds_hash[i] }
 stooqs.each { |i| puts stooqs_hash[i] }
