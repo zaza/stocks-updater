@@ -26,7 +26,6 @@ stooqs = [ "ARKAFRN12", "RCSCRAOPEN", "RCGLDAOPEN", "RCSILAOPEN"]
 tickers = [ "BMP", "COG", "INK", "IPL", "RHD", "VST", "ZAP", "TPS" ]
 currencies = [ "USD", "AUD", "EUR" ]
 investors = ["Investor FIZ", "Investor Gold FIZ"]
-coins = ["silver eagle"]
 
 funds_hash = {}
 stooqs_hash = {}
@@ -131,8 +130,9 @@ if td.inner_html =~ /\d{4}-\d{2}-\d{2}/
   end
 end
 
-#1) silver, najlepsza cena z http://baksy.pl/zlom.php3 albo http://www.acclamatio.pl/index.php
-#2) RCSILAOPEN = monety, uncja srebra w pln
+# monety:
+#1) max(http://baksy.pl/zlom.php3 , http://www.acclamatio.pl/index.php)
+#2) RCSILAOPEN = uncja srebra w pln
 
 funds.each { |i| puts funds_hash[i] }
 stooqs.each { |i| puts stooqs_hash[i] }
