@@ -23,7 +23,7 @@ funds = [
 "UniFundusze FIO Sub. UniKorona Pieniężny"];
 #RCSILAOPEN = monety, uncja srebra w pln
 stooqs = [ "ARKAFRN12", "RCSCRAOPEN", "RCGLDAOPEN", "RCSILAOPEN"]
-tickers = [ "BMP", "COG", "INK", "IPL", "RHD", "VST", "ZAP", "TPS" ]
+tickers = [ "BMP", "COG", "INK", "IPL", "RHD", "VST", "ZAP", "TPS", "TPE" ]
 currencies = [ "USD", "AUD", "EUR" ]
 investors = ["Investor FIZ", "Investor Gold FIZ"]
 
@@ -95,7 +95,7 @@ doc.search("//p[@class='std-b2']").each do |p|
 end
 
 #TODO: run walutomat.pl first and skip found currencies on baksy.pl
-uri = URI.parse(ARGV[0] || 'https://www.walutomat.pl/')
+uri = URI.parse('https://www.walutomat.pl/')
 http = Net::HTTP.new(uri.host, uri.port)
 http.use_ssl = true if uri.scheme == "https"  # enable SSL/TLS
 http.verify_mode = OpenSSL::SSL::VERIFY_NONE
