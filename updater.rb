@@ -68,40 +68,37 @@ module Updater
       # [<short name>] <long name> (sr) 
       if v =~ /\[([A-Z0-9]+)\].+\(sr\)/
         if $1 == key
-          ws.Range("F" + i.to_s).Value = item.price
-          ws.Range("G" + i.to_s).Value = item.date
-          print "(1) found at " + i.to_s
-          $\ = nil
+          update_cell("1", ws, i.to_s, item)
           break
         end
         # <long name> (sr)
       elsif v =~ /([\w\ \.:ęóąśłżźćńĘÓĄŚŁŻŹĆŃ]+)\ \(sr\)/
         if $1 == key
-          ws.Range("F" + i.to_s).Value = item.price
-          ws.Range("G" + i.to_s).Value = item.date
-          print "(2) found at " + i.to_s
-          $\ = nil
+          update_cell("2", ws, i.to_s, item)
           break
         end
         # [<short name>] <long name>
       elsif v =~ /\[([A-Z0-9]+)\].*/
         if $1 == key
-          ws.Range("F" + i.to_s).Value = item.price
-          ws.Range("G" + i.to_s).Value = item.date
-          print "(3) found at " + i.to_s
-          $\ = nil
+          update_cell("3", ws, i.to_s, item)
           break
         end
         # <long name>
       elsif v =~ /[\w\ \.:ęóąśłżźćńĘÓĄŚŁŻŹĆŃ]+/
         if $& == key
-          ws.Range("F" + i.to_s).Value = item.price
-          ws.Range("G" + i.to_s).Value = item.date
-          print "(4) found at " + i.to_s
-          $\ = nil
+          update_cell("4", ws, i.to_s, item)
           break
         end
       end
     }
+  end
+  
+  def Updater.update_cell(type, ws, row, item)
+    oldPrice = ws.Range("F" + row).Value
+    ws.Range("F" + row).Value = item.price
+    ws.Range("G" + row).Value = item.date
+    change = (item.price.gsub(',', '.').to_f / oldPrice.to_f-1) * 100
+    printf("(%s) found at %s, change %.2f%\n", type, row, change)
+    $\ = nil
   end
 end
