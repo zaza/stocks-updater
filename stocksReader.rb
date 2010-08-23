@@ -23,7 +23,7 @@ funds = [
 "UniFundusze FIO Sub. UniKorona Pieniężny"];
 #RCSILAOPEN = monety, uncja srebra w pln
 stooqs = [ "ARKAFRN12", "RCSCRAOPEN", "RCGLDAOPEN", "RCSILAOPEN"]
-tickers = [ "BMP", "COG", "INK", "IPL", "RHD", "VST", "ZAP", "TPS", "TPE" ]
+tickers = [ "BMP", "COG", "INK", "IPL", "RHD", "VST", "ZAP", "TPS"]
 currencies = [ "USD", "AUD", "EUR" ]
 investors = ["Investor FIZ", "Investor Gold FIZ"]
 
