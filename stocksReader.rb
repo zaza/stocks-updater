@@ -17,13 +17,13 @@ funds = [
 "Legg Mason Akcji FIO",
 "PZU FIO Akcji MiŚ Spółek",
 "UniFundusze FIO Sub. UniAkcje MiŚS",
-"UniFundusze FIO Sub. UniAkcje: Polska 2012",
+"UniFundusze FIO Sub. UniAkcje Sektory Wzrostu",
 "UniFundusze FIO Sub. UniDolar Obligacje",
 "Amplico FIO Parasol Kraj. Sub. Pieniężny",
 "UniFundusze FIO Sub. UniKorona Pieniężny"];
 #RCSILAOPEN = monety, uncja srebra w pln
-stooqs = [ "ARKAFRN12", "RCSCRAOPEN", "RCGLDAOPEN", "RCSILAOPEN"]
-tickers = [ "BMP", "COG", "INK", "IPL", "RHD", "VST", "ZAP", "TPS"]
+stooqs = [ "ARKAFRN12", "RCGLDAOPEN", "RCSILAOPEN"]
+tickers = [ "BMP", "COG", "INK", "IPL", "RHD", "VST", "ZAP"]
 currencies = [ "USD", "AUD", "EUR" ]
 investors = ["Investor FIZ", "Investor Gold FIZ"]
 
