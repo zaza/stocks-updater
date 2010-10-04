@@ -62,6 +62,7 @@ module Updater
     $\ = "\n"
 
     v = ""
+    found = false
     100.downto(1) {|i|
       # column C
       v = ws.Cells(i, 3).Value
@@ -69,28 +70,36 @@ module Updater
       if v =~ /\[([A-Z0-9]+)\].+\(sr\)/
         if $1 == key
           update_cell("1", ws, i.to_s, item)
+          found = true
           break
         end
         # <long name> (sr)
       elsif v =~ /([\w\ \.:ęóąśłżźćńĘÓĄŚŁŻŹĆŃ]+)\ \(sr\)/
         if $1 == key
           update_cell("2", ws, i.to_s, item)
+          found = true
           break
         end
         # [<short name>] <long name>
       elsif v =~ /\[([A-Z0-9]+)\].*/
         if $1 == key
           update_cell("3", ws, i.to_s, item)
+          found = true
           break
         end
         # <long name>
       elsif v =~ /[\w\ \.:ęóąśłżźćńĘÓĄŚŁŻŹĆŃ]+/
         if $& == key
           update_cell("4", ws, i.to_s, item)
+          found = true
           break
         end
       end
     }
+    if (!found)
+      p "NOT FOUND!"
+      $\ = nil
+    end
   end
   
   def Updater.update_cell(type, ws, row, item)
