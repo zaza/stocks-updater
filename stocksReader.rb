@@ -20,11 +20,13 @@ funds = [
 "UniFundusze FIO Sub. UniAkcje Sektory Wzrostu",
 "UniFundusze FIO Sub. UniDolar Obligacje",
 "Amplico FIO Parasol Kraj. Sub. Pieniężny",
-"UniFundusze FIO Sub. UniKorona Pieniężny"];
+"UniFundusze FIO Sub. UniKorona Pieniężny",
+"ING Parasol FIO Sub. Gotówkowy"];
+#SKARBIEC-ALTERNATYWNY SFIO skad brac notowania? - http://www.skarbiec.pl/dla_klientow/notowania/
 #RCSILAOPEN = monety, uncja srebra w pln
 stooqs = [ "ARKAFRN12", "RCGLDAOPEN", "RCSILAOPEN"]
-tickers = [ "BMP", "COG", "INK", "IPL", "RHD", "VST", "ZAP"]
-currencies = [ "USD", "AUD", "EUR" ]
+tickers = [ "BMP", "COG", "INK", "IPL", "VST", "ZAP"]
+currencies = [ "USD", "AUD", "EUR", "CHF" ]
 investors = ["Investor FIZ", "Investor Gold FIZ"]
 
 funds_hash = {}
