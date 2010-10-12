@@ -21,10 +21,10 @@ funds = [
 "UniFundusze FIO Sub. UniDolar Obligacje",
 "Amplico FIO Parasol Kraj. Sub. Pieniężny",
 "UniFundusze FIO Sub. UniKorona Pieniężny",
-"ING Parasol FIO Sub. Gotówkowy"];
-#SKARBIEC-ALTERNATYWNY SFIO skad brac notowania? - http://www.skarbiec.pl/dla_klientow/notowania/
+"ING Parasol FIO Sub. Gotówkowy",
+"SKARBIEC-ALTERNATYWNY SFIO"];
 #RCSILAOPEN = monety, uncja srebra w pln
-stooqs = [ "ARKAFRN12", "RCGLDAOPEN", "RCSILAOPEN"]
+stooqs = [ "ARKAFRN12", "RCGLDAOPEN", "RCSILAOPEN", "RCSCRAOPEN"]
 tickers = [ "BMP", "COG", "INK", "IPL", "VST", "ZAP"]
 currencies = [ "USD", "AUD", "EUR", "CHF" ]
 investors = ["Investor FIZ", "Investor Gold FIZ"]
@@ -34,6 +34,25 @@ stooqs_hash = {}
 tickers_hash = {}
 currencies_hash = {}
 investors_hash = {}
+
+# only "SKARBIEC-ALTERNATYWNY SFIO"
+page = open("http://www.skarbiec.pl/dla_klientow/notowania/").read
+doc = Hpricot(page)
+doc.search("//tr/td[@class='title']/span[@class='leftSide']/a").each do |a|
+  fund = a.inner_html
+  if fund == "SKARBIEC-ALTERNATYWNY SFIO"
+    div = a.parent.parent.parent.at("td[@class='value']/div")
+    if div.inner_html =~ /([0-9]+,[0-9]{2}) PLN/
+      price = $1
+      date = div.at("div[@class='data']").inner_html
+      if date =~ /[0-9]{4}-[0-9]{2}-[0-9]{2}/
+        date = $&
+        funds_hash[fund] = Item.new(fund, price, date)
+        break
+      end
+    end
+  end
+end
 
 page = open("http://www.bankier.pl/inwestowanie/notowania/fundusze/?aktywny=7").read
 page = Iconv.iconv('utf-8','iso-8859-2',page).first

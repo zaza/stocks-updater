@@ -88,7 +88,7 @@ module Updater
           break
         end
         # <long name>
-      elsif v =~ /[\w\ \.:ęóąśłżźćńĘÓĄŚŁŻŹĆŃ]+/
+      elsif v =~ /[\w\ \.:ęóąśłżźćńĘÓĄŚŁŻŹĆŃ-]+/
         if $& == key
           update_cell("4", ws, i.to_s, item)
           found = true
