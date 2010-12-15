@@ -24,7 +24,7 @@ funds = [
 "ING Parasol FIO Sub. Gotówkowy",
 "SKARBIEC-ALTERNATYWNY SFIO"];
 #RCSILAOPEN = monety, uncja srebra w pln
-stooqs = [ "ARKAFRN12", "RCGLDAOPEN", "RCSILAOPEN", "RCSCRAOPEN"]
+stooqs = [ "ARKAFRN12", "RCSILAOPEN"]
 tickers = [ "BMP", "COG", "INK", "IPL", "VST", "ZAP"]
 currencies = [ "USD", "AUD", "EUR", "CHF" ]
 investors = ["Investor FIZ", "Investor Gold FIZ"]
