@@ -4,10 +4,14 @@ public class Data {
 
 	private Date date;
 	private float value;
+	private String name;
+	private String fullName;
 
-	public Data(Date date, float value) {
+	public Data(Date date, float value, String name, String fullName) {
 		this.date = date;
 		this.value = value;
+		this.name = name;
+		this.fullName = fullName;
 	}
 
 	public Date getDate() {
@@ -19,15 +23,11 @@ public class Data {
 	}
 
 	public String getName() {
-		return null;
-		// TODO Auto-generated method stub
-
+		return name;
 	}
 
 	public String getFullName() {
-		return null;
-		// TODO Auto-generated method stub
-
+		return fullName;
 	}
 
 }

@@ -29,10 +29,12 @@ import com.sun.org.apache.xpath.internal.XPathAPI;
 public class InvestorsPlDataCollector extends DataCollector {
 
 	private String asset;
+	private String fullName;
 	private Document dom;
 
-	public InvestorsPlDataCollector(String asset) {
+	public InvestorsPlDataCollector(String asset, String fullName) {
 		this.asset = asset;
+		this.fullName = fullName;
 	}
 
 	@Override
@@ -54,7 +56,7 @@ public class InvestorsPlDataCollector extends DataCollector {
 					String value = childNodes.item(1).getFirstChild().getNodeValue();
 					DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 					Date d = df.parse(date); 
-					Data data = new Data(d, Float.parseFloat(value));
+					Data data = new Data(d, Float.parseFloat(value), asset, fullName);
 					result.add(data);
 				}
 			}

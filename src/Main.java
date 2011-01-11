@@ -6,7 +6,7 @@ public class Main {
 		DataCollector invfiz = new StooqHistoricalDataCollector("INVFIZ", new Date(2009, 1, 1), new Date(System.currentTimeMillis()), StooqHistoricalDataInterval.Daily);
 		List stooqData = invfiz.collectData();
 		
-		DataCollector invfizInvestorsPl = new InvestorsPlDataCollector("investor-fiz");
+		DataCollector invfizInvestorsPl = new InvestorsPlDataCollector("investor-fiz", "Investor FIZ");
 		List investorsPlData = invfizInvestorsPl.collectData();
 	}
 }
