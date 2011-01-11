@@ -1,5 +1,12 @@
+import java.util.Date;
+
 
 public class StooqData extends Data {
+
+	public StooqData(Date date, float value) {
+		super(date, value);
+		// TODO Auto-generated constructor stub
+	}
 
 	public float getAsk() {
 		return 0;
