@@ -1,6 +1,10 @@
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -32,31 +36,35 @@ public class InvestorsPlDataCollector extends DataCollector {
 	}
 
 	@Override
-	public List collectData() {
-		List result = new ArrayList();
-			InputStream inputStream = getInput();
-			parseXmlFile(inputStream);
-			
-			
-			System.out.print("Reading DOM... ");
-//			Element div_rok_2010 = dom.getElementById("rok_2010");
-			try {
-				NodeList nodes = XPathAPI.selectNodeList(dom, "//div[@class='resultsYear']/table/tr");
-				if (nodes != null && nodes.getLength() > 0) {
-					for (int i = 0; i < nodes.getLength(); i++) {
-						Element element = (Element) nodes.item(i);
-						NodeList childNodes = element.getChildNodes();
-						// getTextContent() is not supported!
-						String date = childNodes.item(0).getFirstChild().getNodeValue();
-						String value = childNodes.item(1).getFirstChild().getNodeValue();
-//						Data d = new Data(new Date(), );
-						System.out.println("d="+date+", v="+value);
-					}
+	public List<Data> collectData() {
+		List<Data> result = new ArrayList<Data>();
+		InputStream inputStream = getInput();
+		parseXmlFile(inputStream);
+
+
+		System.out.print("Reading DOM... ");
+		try {
+			NodeList nodes = XPathAPI.selectNodeList(dom, "//div[@class='resultsYear']/table/tr");
+			if (nodes != null && nodes.getLength() > 0) {
+				for (int i = 0; i < nodes.getLength(); i++) {
+					Element element = (Element) nodes.item(i);
+					NodeList childNodes = element.getChildNodes();
+					// getTextContent() is not supported!
+					String date = childNodes.item(0).getFirstChild().getNodeValue();
+					String value = childNodes.item(1).getFirstChild().getNodeValue();
+					DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+					Date d = df.parse(date); 
+					Data data = new Data(d, Float.parseFloat(value));
+					result.add(data);
 				}
-			} catch (TransformerException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			}
+		} catch (TransformerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return result;
 	}
 	

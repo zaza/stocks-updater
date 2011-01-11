@@ -1,7 +1,8 @@
+import static org.junit.Assert.assertEquals;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
 import java.util.Iterator;
@@ -26,8 +27,10 @@ public class DataCollectorTests {
 				return null;
 			};
 		};
-		List data = invfizInvestorsPl.collectData();
-		for (Iterator iterator = data.iterator(); iterator.hasNext();) {
+		List<Data> data = invfizInvestorsPl.collectData();
+		// 2010+2009+2008+2007+2006+2005
+		assertEquals(12+12+12+12+12+6, data.size());
+		for (Iterator<Data> iterator = data.iterator(); iterator.hasNext();) {
 			Data d = (Data) iterator.next();
 			d.getDate();
 			d.getValue();
