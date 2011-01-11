@@ -5,12 +5,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
 import org.apache.commons.httpclient.HttpClient;
@@ -19,10 +15,8 @@ import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.tidy.Tidy;
-import org.xml.sax.SAXException;
 
 import com.sun.org.apache.xpath.internal.XPathAPI;
 
@@ -47,6 +41,9 @@ public class InvestorsPlDataCollector extends DataCollector {
 		System.out.print("Reading DOM... ");
 		try {
 			NodeList nodes = XPathAPI.selectNodeList(dom, "//div[@class='resultsYear']/table/tr");
+			if (nodes == null || nodes.getLength() == 0)
+				// results still in one table
+				nodes = XPathAPI.selectNodeList(dom, "//div[@id='results']/table/tr[position()>1]");
 			if (nodes != null && nodes.getLength() > 0) {
 				for (int i = 0; i < nodes.getLength(); i++) {
 					Element element = (Element) nodes.item(i);
