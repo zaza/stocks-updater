@@ -1,3 +1,9 @@
 public enum StooqHistoricalDataInterval {
-	Daily, Weekly, Monthly, Quarterly, Yearly
+	Daily ("d"), Weekly("w"), Monthly("m"), Quarterly("q"), Yearly("y");
+	private String internal;
+
+	StooqHistoricalDataInterval(String internal) {
+        this.internal = internal;
+    }
+
 }

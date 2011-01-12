@@ -159,12 +159,25 @@ public class DataCollectorTests {
 	@Test
 	public void testStooqHistoricalData() throws Exception {
 		DataCollector invfizInvestorsPl = new StooqHistoricalDataCollector(
-				"INVFIZ", new Date(System.currentTimeMillis()), new Date(System
+				"invfiz", "Investor FIZ", new Date(System.currentTimeMillis()), new Date(System
 						.currentTimeMillis()),
-				StooqHistoricalDataInterval.Daily);
-		List data = invfizInvestorsPl.collectData();
+				StooqHistoricalDataInterval.Daily) {
+			protected InputStream getInput() {
+				File file = new File(
+						"test/data/invfiz_d.csv");
+				try {
+					return new FileInputStream(file);
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				return null;
+			};
+		};
+		List<Data> data = invfizInvestorsPl.collectData();
+		assertEquals(746, data.size());
 		// TODO: ignore empty result on Sat and Sun
-		for (Iterator iterator = data.iterator(); iterator.hasNext();) {
+		for (Iterator<Data> iterator = data.iterator(); iterator.hasNext();) {
 			StooqHistoricalData d = (StooqHistoricalData) iterator.next();
 			d.getDate();
 			d.getOpen();
@@ -179,7 +192,7 @@ public class DataCollectorTests {
 
 	@Test
 	public void testStooqToday() throws Exception {
-		DataCollector invfizInvestorsPl = new StooqDataCollector("INVFIZ",
+		DataCollector invfizInvestorsPl = new StooqDataCollector("invfiz",
 				new Date(System.currentTimeMillis()));
 		List data = invfizInvestorsPl.collectData();
 		// TODO: ignore empty result on Sat and Sun
