@@ -2,39 +2,40 @@ import java.util.Date;
 
 public class StooqHistoricalData extends Data {
 
-	public StooqHistoricalData(Date date, float value, String name,
-			String fullName) {
-		super(date, value, name, fullName);
-		// TODO Auto-generated constructor stub
+	private float open;
+	private float high;
+	private float low;
+	private float close;
+	private int volume;
+
+	public StooqHistoricalData(Date date, float open, float high, float low,
+			float close, int volume, String name, String fullName) {
+		super(date, -1, name, fullName);
+		this.open = open;
+		this.high = high;
+		this.low = low;
+		this.close = close;
+		this.volume = volume;
 	}
 
 	public float getOpen() {
-		return 0;
-		// TODO Auto-generated method stub
-
+		return this.open;
 	}
 
 	public float getHigh() {
-		return 0;
-		// TODO Auto-generated method stub
-
+		return this.high;
 	}
 
 	public float getLow() {
-		return 0;
-		// TODO Auto-generated method stub
-
+		return this.low;
 	}
 
 	public float getClose() {
-		return 0;
-		// TODO Auto-generated method stub
-
+		return this.close;
 	}
 
 	public int getVolume() {
-		return 0;
-		// TODO Auto-generated method stub
+		return this.volume;
 	}
 
 	@Override

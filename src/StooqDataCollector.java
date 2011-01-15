@@ -1,3 +1,4 @@
+import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
 
@@ -18,9 +19,14 @@ public class StooqDataCollector extends DataCollector {
 	}
 	
 	@Override
-	public List collectData() {
+	public List<Data> collectData() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	protected InputStream getInput() {
+		throw new UnsupportedOperationException();
+		// http://stooq.pl/q/d/?s=invfiz&c=0&d1=20080122&d2=20110111
 	}
 
 }

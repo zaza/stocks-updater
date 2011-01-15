@@ -9,6 +9,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.BasicResponseHandler;
+import org.apache.http.impl.client.DefaultHttpClient;
+
 public class StooqHistoricalDataCollector extends DataCollector {
 
 	private String asset;
@@ -27,43 +33,74 @@ public class StooqHistoricalDataCollector extends DataCollector {
 	}
 
 	@Override
-	public List collectData() {
+	public List<Data> collectData() {
 		List<Data> result = new ArrayList<Data>();
-		InputStream inputStream = getInput();
-		BufferedReader bufferedReader = new BufferedReader(
-				new InputStreamReader(inputStream));
-		String line;
 		try {
+			InputStream inputStream = getInput();
+			BufferedReader bufferedReader = new BufferedReader(
+					new InputStreamReader(inputStream));
+			String line = bufferedReader.readLine();
 			while ((line = bufferedReader.readLine()) != null) {
 				String[] split = line.split(",");
-				      DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-				Date d;
-				try {
-					d = df.parse(split[0]);
-				} catch (ParseException e) {
-					// ignore
-					continue;
-				} 
-				// split[1] otwarcie
-				// split[2] najwyzszy
-				// split[3] najnizszy
-				String close = split[4];
-				// split[5] wolumen
-				StooqHistoricalData data = new StooqHistoricalData(d, Float.parseFloat(close), asset, fullName);
+				DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+				Date d = df.parse(split[0]);
+				float open =  Float.parseFloat(split[1]);
+				float high =  Float.parseFloat(split[2]);
+				float low =  Float.parseFloat(split[3]);
+				float close =  Float.parseFloat(split[4]);
+				int volume =  Integer.parseInt(split[5]);
+				StooqHistoricalData data = new StooqHistoricalData(d, open, high, low, close, volume, asset, fullName);
 				result.add(data);
 			}
 			inputStream.close();
 		} catch (IOException e) {
 			e.printStackTrace();
+		} catch (ParseException e) {
+			e.printStackTrace();
 		}
 		return result;
 	}
-
-	protected InputStream getInput() {
-		// http://stooq.pl/q/d/?s=invfiz&c=0&d1=20080122&d2=20110111
-		// http://stooq.pl/q/d/l/?s=invfiz&d1=20080122&d2=20110111&i=d csv,
-		// przecinek
-		throw new UnsupportedOperationException("not implemented yet");
+	
+	protected InputStream getInput() throws IOException {
+		HttpClient httpclient = new DefaultHttpClient();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+		HttpGet httpget = new HttpGet("http://stooq.pl/q/d/l/?s=" + asset
+				+ "&d1=" + sdf.format(start) + "&d2=" + sdf.format(end) + "&i="
+				+ interval.toString());
+//		HttpGet httpget = new HttpGet("http://stooq.pl/q/d/?s=invfiz&c=0&d1=20080122&d2=20110111");
+		ResponseHandler<String> responseHandler = new BasicResponseHandler();
+//		String responseBody = httpclient.execute(httpget, responseHandler);
+		return httpclient.execute(httpget).getEntity().getContent();
+//		System.out.println(responseBody);
+//		httpclient.getConnectionManager().shutdown();
+//		return new ByteArrayInputStream(responseBody.getBytes());
 	}
+	
+	/*
+	protected InputStream getInput() {
+		HttpClient client = new HttpClient();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+		GetMethod method = new GetMethod("http://stooq.pl/q/d/l/?s="+asset+"&d1="+sdf.format(start)+"&d2="+sdf.format(end)+"&i="+interval.toString());
+		try {
+			System.out.print("Executing GET... ");
+			int statusCode = client.executeMethod(method);
+			if (statusCode != HttpStatus.SC_OK) {
+				System.err.println("Method failed: " + method.getStatusLine());
+				// TODO: return null
+			}
+			System.out.println("done.");
+			return method.getResponseBodyAsStream();
+		} catch (HttpException e) {
+			System.err.println("Fatal protocol violation: " + e.getMessage());
+			e.printStackTrace();
+		} catch (IOException e) {
+			System.err.println("Fatal transport error: " + e.getMessage());
+			e.printStackTrace();
+		} finally {
+			method.releaseConnection();
+		}
+		return null;
+	}
+	*/
 
 }

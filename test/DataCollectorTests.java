@@ -12,6 +12,7 @@ import java.util.List;
 
 import org.junit.Test;
 
+
 public class DataCollectorTests {
 
 	@Test
@@ -176,18 +177,19 @@ public class DataCollectorTests {
 		};
 		List<Data> data = invfizInvestorsPl.collectData();
 		assertEquals(746, data.size());
-		// TODO: ignore empty result on Sat and Sun
-		for (Iterator<Data> iterator = data.iterator(); iterator.hasNext();) {
-			StooqHistoricalData d = (StooqHistoricalData) iterator.next();
-			d.getDate();
-			d.getOpen();
-			d.getHigh();
-			d.getLow();
-			d.getClose();
-			d.getVolume();
-			// d.getValue(); == getClose();
-
-		}
+		
+		StooqHistoricalData first = (StooqHistoricalData) data.get(data.size() - 1);
+		assertEquals("invfiz", first.getName());
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		Date d = df.parse("2011-1-11");
+		assertEquals(d, first.getDate());
+		assertEquals(2400.01f, first.getOpen(), 0);
+		assertEquals(2412f, first.getHigh(), 0);
+		assertEquals(2400.01f, first.getLow(), 0);
+		assertEquals(2402f, first.getClose(), 0);
+		assertEquals(2402f, first.getValue(), 0);
+		assertEquals(21, first.getVolume(), 0);
+		assertEquals("Investor FIZ", first.getFullName());
 	}
 
 	@Test

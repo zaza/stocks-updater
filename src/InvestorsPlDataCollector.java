@@ -1,3 +1,6 @@
+
+
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.DateFormat;
@@ -9,16 +12,16 @@ import java.util.List;
 
 import javax.xml.transform.TransformerException;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpException;
-import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.BasicResponseHandler;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.xpath.XPathAPI;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.w3c.tidy.Tidy;
-
-import com.sun.org.apache.xpath.internal.XPathAPI;
 
 public class InvestorsPlDataCollector extends DataCollector {
 
@@ -34,12 +37,10 @@ public class InvestorsPlDataCollector extends DataCollector {
 	@Override
 	public List<Data> collectData() {
 		List<Data> result = new ArrayList<Data>();
-		InputStream inputStream = getInput();
-		parseXmlFile(inputStream);
-
-
-		System.out.print("Reading DOM... ");
 		try {
+			InputStream inputStream = getInput();
+			parseXmlFile(inputStream);
+			System.out.print("Reading DOM... ");
 			NodeList nodes = XPathAPI.selectNodeList(dom, "//div[@class='resultsYear']/table/tr");
 			if (nodes == null || nodes.getLength() == 0)
 				// results still in one table
@@ -63,10 +64,24 @@ public class InvestorsPlDataCollector extends DataCollector {
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		return result;
 	}
 	
+	protected InputStream getInput() throws IOException {
+		HttpClient httpclient = new DefaultHttpClient();
+		HttpGet httpget = new HttpGet("http://tfi.investors.pl/" + asset
+				+ "/wyniki.html");
+		ResponseHandler<String> responseHandler = new BasicResponseHandler();
+		String responseBody = httpclient.execute(httpget, responseHandler);
+		httpclient.getConnectionManager().shutdown();
+		return new ByteArrayInputStream(responseBody.getBytes());
+	}
+	
+	/*
 	protected InputStream getInput() {
 		HttpClient client = new HttpClient();
 
@@ -97,7 +112,7 @@ public class InvestorsPlDataCollector extends DataCollector {
 		}
 		return null;
 	}
-	
+	*/
 	private void parseXmlFile(InputStream in) {
 		System.out.print("Parsing the input stream... ");
 		Tidy tidy = new Tidy();
