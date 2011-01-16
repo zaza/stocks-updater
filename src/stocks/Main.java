@@ -37,10 +37,10 @@ public class Main {
 			String file = "output/" + fund.getStooq() + "_" + sdf.format(c1.getTime()) + ".csv";
 			toCsvFile(matched, file);
 		}
-		// silver
+		// TODO:silver
 //		AllegroCoinsCollector allegroCoins = new AllegroCoinsCollector();
 //		List<Data> allegroCoinsData = allegroCoins.collectData();
-		// arkafrn12
+		// TODO:arkafrn12
 	}
 	
 	private static void toCsvFile(List<Data[]> matched, String filePath) throws IOException {
@@ -48,14 +48,13 @@ public class Main {
 		for (Iterator<Data[]> iterator = matched.iterator(); iterator.hasNext();) {
 			Data[] datas = (Data[]) iterator.next();
 			float v1 = datas[0].getValue();
-			String value1 = Float.toString(v1);
+			String value1 = Float.toString(v1).replace('.', ',');
 			String value2 = "";
 			if (datas[1] != null) {
 				float v2 = datas[1].getValue();
-				value2 = Float.toString(v2);
+				value2 = Float.toString(v2).replace('.', ',');
 			}
-			// TODO: to file, floats with ',', separate by ';'
-			out.write(datas[0].getFormattedDate() + "," + value1 + ","	+ value2);
+			out.write(datas[0].getFormattedDate() + ";" + value1 + ";"	+ value2);
 			out.newLine();
 		}
 		out.close();
