@@ -1,3 +1,4 @@
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Data implements Comparable<Data>{
@@ -27,6 +28,11 @@ public class Data implements Comparable<Data>{
 	@Override
 	public int compareTo(Data o) {
 		return this.date.compareTo(o.getDate());
+	}
+	
+	public String getFormattedDate() {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		return sdf.format(date);
 	}
 
 }

@@ -34,7 +34,7 @@ public class DataCollectorTests {
 		assertEquals(12 /* 2010 */+ 12 /* 2009 */+ 12 /* 2008 */+ 12 /* 2007 */
 				+ 12 /* 2006 */+ 6/* 2005 */, data.size());
 
-		Data first = data.get(data.size() - 1);
+		Data first = data.get(0);
 		assertEquals("investor-fiz", first.getName());
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 		Date d = df.parse("2005-9-2");
@@ -62,7 +62,7 @@ public class DataCollectorTests {
 		assertEquals(12 /* 2010 */+ 12 /* 2009 */+ 12 /* 2008 */+ 12 /* 2007 */
 				+ 5/* 2006 */, data.size());
 
-		Data first = data.get(data.size() - 1);
+		Data first = data.get(0);
 		assertEquals("investor-gold-fiz", first.getName());
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 		Date d = df.parse("2006-9-24");
@@ -90,7 +90,7 @@ public class DataCollectorTests {
 		assertEquals(12 /* 2010 */+ 12 /* 2009 */+ 12 /* 2008 */
 				+ 9/* 2007 */, data.size());
 
-		Data first = data.get(data.size() - 1);
+		Data first = data.get(0);
 		assertEquals("investor-cee-fiz", first.getName());
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 		Date d = df.parse("2007-5-21");
@@ -117,7 +117,7 @@ public class DataCollectorTests {
 		List<Data> data = invfizInvestorsPl.collectData();
 		assertEquals(15, data.size());
 
-		Data first = data.get(data.size() - 1);
+		Data first = data.get(0);
 		assertEquals("investor-pe-fiz", first.getName());
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 		Date d = df.parse("2007-9-21");
@@ -144,7 +144,7 @@ public class DataCollectorTests {
 		List<Data> data = invfizInvestorsPl.collectData();
 		assertEquals(4, data.size());
 
-		Data first = data.get(data.size() - 1);
+		Data first = data.get(0);
 		assertEquals("investor-property-fiz", first.getName());
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 		Date d = df.parse("2010-7-9");
@@ -160,7 +160,7 @@ public class DataCollectorTests {
 				StooqHistoricalDataInterval.Daily) {
 			protected InputStream getInput() {
 				File file = new File(
-						"test/data/invfiz_d.csv");
+						"data/invfiz_d.csv");
 				try {
 					return new FileInputStream(file);
 				} catch (FileNotFoundException e) {

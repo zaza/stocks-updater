@@ -1,4 +1,7 @@
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -9,12 +12,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.BasicResponseHandler;
-import org.apache.http.impl.client.DefaultHttpClient;
 
 public class StooqHistoricalDataCollector extends DataCollector {
 
@@ -62,13 +59,25 @@ public class StooqHistoricalDataCollector extends DataCollector {
 	}
 	
 	protected InputStream getInput() throws IOException {
+		File file = new File("data/" + asset + "_" + interval.toString()
+				+ ".csv");
+		try {
+			return new FileInputStream(file);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	/*
+	 * 4.x
+	protected InputStream getInput() throws IOException {
 		HttpClient httpclient = new DefaultHttpClient();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-//		HttpGet httpget = new HttpGet("http://stooq.pl/q/d/l/?s=" + asset
-//				+ "&d1=" + sdf.format(start) + "&d2=" + sdf.format(end) + "&i="
-//				+ interval.toString());
-//		HttpGet httpget = new HttpGet("http://stooq.pl/q/d/?s=invfiz&c=0&d1=20080122&d2=20110111");
-		HttpGet httpget = new HttpGet("http://stooq.pl/q/d/l/?s=invfiz&c=0&d1=20080122&d2=20110111&i=d");
+		HttpGet httpget = new HttpGet("http://stooq.pl/q/d/l/?s=" + asset
+				+ "&d1=" + sdf.format(start) + "&d2=" + sdf.format(end) + "&i="
+				+ interval.toString());
 		ResponseHandler<String> responseHandler = new BasicResponseHandler();
 //		String responseBody = httpclient.execute(httpget, responseHandler);
 		return httpclient.execute(httpget).getEntity().getContent();
@@ -76,8 +85,10 @@ public class StooqHistoricalDataCollector extends DataCollector {
 //		httpclient.getConnectionManager().shutdown();
 //		return new ByteArrayInputStream(responseBody.getBytes());
 	}
+	*/
 	
 	/*
+	 * 3.x
 	protected InputStream getInput() {
 		HttpClient client = new HttpClient();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
