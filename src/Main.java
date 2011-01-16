@@ -17,9 +17,17 @@ public class Main {
 		List<Data[]> matched = DataUtils.matchByDate(investorsPlData, stooqHistData);
 		for (Iterator<Data[]> iterator = matched.iterator(); iterator.hasNext();) {
 			Data[] datas = (Data[]) iterator.next();
-			String d2 = datas[1] == null ? "" : datas[1].getValue() + "";
+			float v1 = datas[0].getValue();
+			String value1 = Float.toString(v1);
+			String value2 = "";
+			String ratio = "";
+			if (datas[1] != null) {
+				float v2 = datas[1].getValue();
+				value2 = Float.toString(v2);
+				ratio = Float.toString(v2/v1);
+			}
 			// TODO: to file, floats with ',', separate by ';'
-			System.out.println(datas[0].getFormattedDate() + "," + datas[0].getValue() + "," + d2);
+			System.out.println(datas[0].getFormattedDate() + "," + value1 + ","	+ value2 + "," + ratio);
 		}
 	}
 }
