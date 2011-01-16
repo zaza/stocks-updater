@@ -39,7 +39,7 @@ public class DataUtilsTests {
 		data.add(c);
 		Data d = new Data(new Date(2001, 1, 2), 1f, "d");
 		data.add(d);
-		Data byDate = DataUtils.getByDate(data, new Date(2001, 1, 1));
+		Data byDate = DataUtils.getOneByDate(data, new Date(2001, 1, 1));
 		assertEquals(b, byDate);
 	}
 
@@ -143,5 +143,7 @@ public class DataUtilsTests {
 			}
 		}
 	}
+	
+	
 
 }

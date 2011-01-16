@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import stocks.collector.DataCollector;
@@ -59,6 +60,7 @@ public class StooqDataCollectorTests {
 	}
 
 	@Test
+	@Ignore
 	public void testStooqToday() throws Exception {
 		DataCollector invfizInvestorsPl = new StooqDataCollector("invfiz",
 				new Date(System.currentTimeMillis()));
@@ -74,6 +76,7 @@ public class StooqDataCollectorTests {
 		}
 	}
 	@Test
+	@Ignore
 	public void testStooqLast() throws Exception {
 		DataCollector invfizInvestorsPl = new StooqDataCollector("INVFIZ");
 		List data = invfizInvestorsPl.collectData();
