@@ -1,3 +1,5 @@
+package stocks.collector;
+
 
 
 import java.io.ByteArrayInputStream;
@@ -24,8 +26,35 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.w3c.tidy.Tidy;
 
+import stocks.data.Data;
+
 public class InvestorsPlDataCollector extends DataCollector {
 
+	public enum Fund {
+		Invfiz("Investors FIZ", "invfiz", "investor-fiz"), InvGold(
+				"Investors Gold FIZ", "invgld", "investor-gold-fiz"), InvCee(
+				"Investors CEE FIZ", "invcee", "investor-cee-fiz"), InvPe(
+				"Investors PE FIZ", "invpe", "investor-pe-fiz"), InvProperty(
+				"Investors Property FIZ", "invpr", "investor-property-fiz");
+		private String fullName;
+		private String stooq;
+		private String investorsPl;
+
+		Fund(String fullName, String stooq, String investorsPl) {
+			this.fullName = fullName;
+			this.stooq = stooq;
+			this.investorsPl = investorsPl;
+		}
+		
+		public String getStooq() {
+			return stooq;
+		}
+		
+		public String getInvestorsPl() {
+			return investorsPl;
+		}
+	}
+	
 	private String asset;
 	private Document dom;
 

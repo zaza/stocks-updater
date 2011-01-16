@@ -1,3 +1,5 @@
+package stocks.collector;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -12,6 +14,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+
+import stocks.data.Data;
+import stocks.data.StooqHistoricalData;
 
 public class StooqHistoricalDataCollector extends DataCollector {
 

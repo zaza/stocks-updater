@@ -1,7 +1,10 @@
+package stocks.collector;
+
 import java.io.InputStream;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+
+import stocks.data.Data;
 
 
 public class StooqDataCollector extends DataCollector {

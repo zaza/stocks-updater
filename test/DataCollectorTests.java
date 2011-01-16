@@ -12,6 +12,15 @@ import java.util.List;
 
 import org.junit.Test;
 
+import stocks.collector.DataCollector;
+import stocks.collector.InvestorsPlDataCollector;
+import stocks.collector.StooqDataCollector;
+import stocks.collector.StooqHistoricalDataCollector;
+import stocks.collector.StooqHistoricalDataInterval;
+import stocks.data.Data;
+import stocks.data.StooqData;
+import stocks.data.StooqHistoricalData;
+
 
 public class DataCollectorTests {
 
@@ -171,19 +180,19 @@ public class DataCollectorTests {
 			};
 		};
 		List<Data> data = invfizInvestorsPl.collectData();
-		assertEquals(746, data.size());
+		assertEquals(997, data.size());
 		
-		StooqHistoricalData first = (StooqHistoricalData) data.get(data.size() - 1);
+		StooqHistoricalData first = (StooqHistoricalData) data.get(0);
 		assertEquals("invfiz", first.getName());
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-		Date d = df.parse("2011-1-11");
+		Date d = df.parse("2007-1-22");
 		assertEquals(d, first.getDate());
-		assertEquals(2400.01f, first.getOpen(), 0);
-		assertEquals(2412f, first.getHigh(), 0);
-		assertEquals(2400.01f, first.getLow(), 0);
-		assertEquals(2402f, first.getClose(), 0);
-		assertEquals(2402f, first.getValue(), 0);
-		assertEquals(21, first.getVolume(), 0);
+		assertEquals(2199f, first.getOpen(), 0);
+		assertEquals(2199f, first.getHigh(), 0);
+		assertEquals(2050f, first.getLow(), 0);
+		assertEquals(2070f, first.getClose(), 0);
+		assertEquals(2070f, first.getValue(), 0);
+		assertEquals(7, first.getVolume(), 0);
 	}
 
 	@Test

@@ -1,9 +1,11 @@
+package stocks.data;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang.time.DateUtils;
+
 
 public class DataUtils {
 	public static Data getByDate(List<Data> list, Date date) {

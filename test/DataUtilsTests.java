@@ -8,6 +8,9 @@ import java.util.List;
 
 import org.junit.Test;
 
+import stocks.data.Data;
+import stocks.data.DataUtils;
+
 public class DataUtilsTests {
 
 	@Test

@@ -1,3 +1,4 @@
+package stocks.data;
 import java.util.Date;
 
 public class StooqHistoricalData extends Data {
