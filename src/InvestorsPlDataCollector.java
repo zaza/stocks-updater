@@ -39,7 +39,6 @@ public class InvestorsPlDataCollector extends DataCollector {
 		try {
 			InputStream inputStream = getInput();
 			parseXmlFile(inputStream);
-			System.out.print("Reading DOM... ");
 			NodeList nodes = XPathAPI.selectNodeList(dom, "//div[@class='resultsYear']/table/tr");
 			if (nodes == null || nodes.getLength() == 0)
 				// results still in one table
@@ -114,13 +113,10 @@ public class InvestorsPlDataCollector extends DataCollector {
 	}
 	*/
 	private void parseXmlFile(InputStream in) {
-		System.out.print("Parsing the input stream... ");
 		Tidy tidy = new Tidy();
-		tidy.setXHTML(true);
-		tidy.setShowWarnings(false); 
-//		tidy.setErrout(null);
+		tidy.setShowWarnings(false);
+		tidy.setQuiet(true);
 		dom = tidy.parseDOM(in, null);
-		System.out.println("done.");
 	}
 
 }
