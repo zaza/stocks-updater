@@ -7,6 +7,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -26,12 +27,10 @@ import org.w3c.tidy.Tidy;
 public class InvestorsPlDataCollector extends DataCollector {
 
 	private String asset;
-	private String fullName;
 	private Document dom;
 
-	public InvestorsPlDataCollector(String asset, String fullName) {
+	public InvestorsPlDataCollector(String asset) {
 		this.asset = asset;
-		this.fullName = fullName;
 	}
 
 	@Override
@@ -54,7 +53,7 @@ public class InvestorsPlDataCollector extends DataCollector {
 					String value = childNodes.item(1).getFirstChild().getNodeValue();
 					DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 					Date d = df.parse(date); 
-					Data data = new Data(d, Float.parseFloat(value), asset, fullName);
+					Data data = new Data(d, Float.parseFloat(value), asset);
 					result.add(data);
 				}
 			}
@@ -68,6 +67,7 @@ public class InvestorsPlDataCollector extends DataCollector {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		Collections.sort(result);
 		return result;
 	}
 	

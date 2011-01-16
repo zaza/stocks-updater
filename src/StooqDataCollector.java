@@ -1,4 +1,5 @@
 import java.io.InputStream;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -21,6 +22,7 @@ public class StooqDataCollector extends DataCollector {
 	@Override
 	public List<Data> collectData() {
 		// TODO Auto-generated method stub
+		// Collections.sort(result);
 		return null;
 	}
 

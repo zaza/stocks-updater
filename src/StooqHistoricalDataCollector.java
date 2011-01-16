@@ -6,6 +6,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -18,15 +19,13 @@ import org.apache.http.impl.client.DefaultHttpClient;
 public class StooqHistoricalDataCollector extends DataCollector {
 
 	private String asset;
-	private String fullName;
 	private Date start;
 	private Date end;
 	private StooqHistoricalDataInterval interval;
 
-	public StooqHistoricalDataCollector(String asset, String fullName, Date start, Date end,
+	public StooqHistoricalDataCollector(String asset, Date start, Date end,
 			StooqHistoricalDataInterval interval) {
 		this.asset = asset;
-		this.fullName = fullName;
 		this.start = start;
 		this.end = end;
 		this.interval = interval;
@@ -49,7 +48,7 @@ public class StooqHistoricalDataCollector extends DataCollector {
 				float low =  Float.parseFloat(split[3]);
 				float close =  Float.parseFloat(split[4]);
 				int volume =  Integer.parseInt(split[5]);
-				StooqHistoricalData data = new StooqHistoricalData(d, open, high, low, close, volume, asset, fullName);
+				StooqHistoricalData data = new StooqHistoricalData(d, open, high, low, close, volume, asset);
 				result.add(data);
 			}
 			inputStream.close();
@@ -58,16 +57,18 @@ public class StooqHistoricalDataCollector extends DataCollector {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
+		Collections.sort(result);
 		return result;
 	}
 	
 	protected InputStream getInput() throws IOException {
 		HttpClient httpclient = new DefaultHttpClient();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-		HttpGet httpget = new HttpGet("http://stooq.pl/q/d/l/?s=" + asset
-				+ "&d1=" + sdf.format(start) + "&d2=" + sdf.format(end) + "&i="
-				+ interval.toString());
+//		HttpGet httpget = new HttpGet("http://stooq.pl/q/d/l/?s=" + asset
+//				+ "&d1=" + sdf.format(start) + "&d2=" + sdf.format(end) + "&i="
+//				+ interval.toString());
 //		HttpGet httpget = new HttpGet("http://stooq.pl/q/d/?s=invfiz&c=0&d1=20080122&d2=20110111");
+		HttpGet httpget = new HttpGet("http://stooq.pl/q/d/l/?s=invfiz&c=0&d1=20080122&d2=20110111&i=d");
 		ResponseHandler<String> responseHandler = new BasicResponseHandler();
 //		String responseBody = httpclient.execute(httpget, responseHandler);
 		return httpclient.execute(httpget).getEntity().getContent();

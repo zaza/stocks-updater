@@ -18,7 +18,7 @@ public class DataCollectorTests {
 	@Test
 	public void testInvestors() throws Exception {
 		DataCollector invfizInvestorsPl = new InvestorsPlDataCollector(
-				"investor-fiz", "Investor FIZ") {
+				"investor-fiz") {
 			protected InputStream getInput() {
 				File file = new File("test/data/investors-fiz--wyniki.html");
 				try {
@@ -40,13 +40,12 @@ public class DataCollectorTests {
 		Date d = df.parse("2005-9-2");
 		assertEquals(d, first.getDate());
 		assertEquals(10000, first.getValue(), 0);
-		assertEquals("Investor FIZ", first.getFullName());
 	}
 
 	@Test
 	public void testInvestorsGold() throws Exception {
 		DataCollector invfizInvestorsPl = new InvestorsPlDataCollector(
-				"investor-gold-fiz", "Investor Gold FIZ") {
+				"investor-gold-fiz") {
 			protected InputStream getInput() {
 				File file = new File(
 						"test/data/investors-gold-fiz--wyniki.html");
@@ -69,13 +68,12 @@ public class DataCollectorTests {
 		Date d = df.parse("2006-9-24");
 		assertEquals(d, first.getDate());
 		assertEquals(10000, first.getValue(), 0);
-		assertEquals("Investor Gold FIZ", first.getFullName());
 	}
 
 	@Test
 	public void testInvestorsCee() throws Exception {
 		DataCollector invfizInvestorsPl = new InvestorsPlDataCollector(
-				"investor-cee-fiz", "Investor CEE FIZ") {
+				"investor-cee-fiz") {
 			protected InputStream getInput() {
 				File file = new File(
 						"test/data/investors-cee-fiz--wyniki.html");
@@ -98,13 +96,12 @@ public class DataCollectorTests {
 		Date d = df.parse("2007-5-21");
 		assertEquals(d, first.getDate());
 		assertEquals(1000, first.getValue(), 0);
-		assertEquals("Investor CEE FIZ", first.getFullName());
 	}
 
 	@Test
 	public void testInvestorsPe() throws Exception {
 		DataCollector invfizInvestorsPl = new InvestorsPlDataCollector(
-				"investor-pe-fiz", "Investor PE FIZ") {
+				"investor-pe-fiz") {
 			protected InputStream getInput() {
 				File file = new File(
 						"test/data/investors-pe-fiz--wyniki.html");
@@ -126,13 +123,12 @@ public class DataCollectorTests {
 		Date d = df.parse("2007-9-21");
 		assertEquals(d, first.getDate());
 		assertEquals(1000, first.getValue(), 0);
-		assertEquals("Investor PE FIZ", first.getFullName());
 	}
 	
 	@Test
 	public void testInvestorsProperty() throws Exception {
 		DataCollector invfizInvestorsPl = new InvestorsPlDataCollector(
-				"investor-property-fiz", "Investor Property FIZ") {
+				"investor-property-fiz") {
 			protected InputStream getInput() {
 				File file = new File(
 						"test/data/investors-property-fiz--wyniki.html");
@@ -154,13 +150,12 @@ public class DataCollectorTests {
 		Date d = df.parse("2010-7-9");
 		assertEquals(d, first.getDate());
 		assertEquals(1000, first.getValue(), 0);
-		assertEquals("Investor Property FIZ", first.getFullName());
 	}
 	
 	@Test
 	public void testStooqHistoricalData() throws Exception {
 		DataCollector invfizInvestorsPl = new StooqHistoricalDataCollector(
-				"invfiz", "Investor FIZ", new Date(System.currentTimeMillis()), new Date(System
+				"invfiz", new Date(System.currentTimeMillis()), new Date(System
 						.currentTimeMillis()),
 				StooqHistoricalDataInterval.Daily) {
 			protected InputStream getInput() {
@@ -189,7 +184,6 @@ public class DataCollectorTests {
 		assertEquals(2402f, first.getClose(), 0);
 		assertEquals(2402f, first.getValue(), 0);
 		assertEquals(21, first.getVolume(), 0);
-		assertEquals("Investor FIZ", first.getFullName());
 	}
 
 	@Test

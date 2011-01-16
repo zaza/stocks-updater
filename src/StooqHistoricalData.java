@@ -9,8 +9,8 @@ public class StooqHistoricalData extends Data {
 	private int volume;
 
 	public StooqHistoricalData(Date date, float open, float high, float low,
-			float close, int volume, String name, String fullName) {
-		super(date, -1, name, fullName);
+			float close, int volume, String name) {
+		super(date, -1, name);
 		this.open = open;
 		this.high = high;
 		this.low = low;

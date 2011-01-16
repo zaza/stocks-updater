@@ -2,8 +2,8 @@ import java.util.Date;
 
 public class StooqData extends Data {
 
-	public StooqData(Date date, float value, String name, String fullName) {
-		super(date, value, name, fullName);
+	public StooqData(Date date, float value, String name) {
+		super(date, value, name);
 	}
 
 	public float getAsk() {

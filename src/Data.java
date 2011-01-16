@@ -1,17 +1,15 @@
 import java.util.Date;
 
-public class Data {
+public class Data implements Comparable<Data>{
 
 	private Date date;
 	private float value;
 	private String name;
-	private String fullName;
 
-	public Data(Date date, float value, String name, String fullName) {
+	public Data(Date date, float value, String name) {
 		this.date = date;
 		this.value = value;
 		this.name = name;
-		this.fullName = fullName;
 	}
 
 	public Date getDate() {
@@ -26,8 +24,9 @@ public class Data {
 		return name;
 	}
 
-	public String getFullName() {
-		return fullName;
+	@Override
+	public int compareTo(Data o) {
+		return this.date.compareTo(o.getDate());
 	}
 
 }
