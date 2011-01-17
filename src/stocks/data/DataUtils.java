@@ -1,5 +1,7 @@
 package stocks.data;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -24,15 +26,15 @@ public class DataUtils {
 		return byDate.isEmpty() ? null : byDate.get(0);
 	}
 	
-	public static List<Data[]> matchByDate(List<Data> fund, List<Data> stockExchange) {
-		Date date1 = fund.get(0).getDate();
-		Date date2 = stockExchange.get(0).getDate();
+	public static List<Data[]> matchByDate(List<Data> usePrevWhenNull, List<Data> mayBeNull) {
+		Date date1 = usePrevWhenNull.get(0).getDate();
+		Date date2 = mayBeNull.get(0).getDate();
 		Date start = date1;
 		if (date1.after(date2))
 			throw new IllegalStateException();
 		
-		date1 = fund.get(fund.size() - 1).getDate();
-		date2 = stockExchange.get(stockExchange.size() - 1).getDate();
+		date1 = usePrevWhenNull.get(usePrevWhenNull.size() - 1).getDate();
+		date2 = mayBeNull.get(mayBeNull.size() - 1).getDate();
 		Date end = date1;
 		if (date1.before(date2))
 			end = date2;
@@ -44,14 +46,21 @@ public class DataUtils {
 		List<Data[]> result = new ArrayList<Data[]>(days);
 		for (int i = 0; i < days; i++) {
 			Date d = DateUtils.addDays(start, i);
-			Data data1 = getOneByDate(fund, d);
+			Data data1 = getOneByDate(usePrevWhenNull, d);
 			if (data1 == null) {
 				// use previous
-				Data previous = result.get(i-1)[0];
+				Data previous = result.get(result.size() - 1)[0];
 				data1 = new Data(d, previous.getValue(), previous.getName());
 			}
-			Data data2 = getOneByDate(stockExchange, d);
-			result.add(new Data[] {data1, data2});
+			List<Data> data2 = getByDate(mayBeNull, d);
+			if (data2.isEmpty()) {
+				result.add(new Data[] {data1, null});
+			} else {
+				for (Iterator<Data> iterator = data2.iterator(); iterator.hasNext();) {
+					Data data = (Data) iterator.next();
+					result.add(new Data[] {data1, data});
+				}
+			}
 		} 
 
 		return result;

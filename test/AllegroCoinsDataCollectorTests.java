@@ -18,7 +18,7 @@ public class AllegroCoinsDataCollectorTests {
 	public void testAllegroCoinsData() throws Exception {
 		DataCollector allegroCoins = new AllegroCoinsDataCollector();
 		List<Data> data = allegroCoins.collectData();
-		assertEquals(411 + 26, data.size());
+		assertEquals(411 + 28, data.size());
 
 		AllegroData first = (AllegroData) data.get(0);
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");

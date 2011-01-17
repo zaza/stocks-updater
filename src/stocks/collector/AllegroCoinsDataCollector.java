@@ -52,7 +52,7 @@ public class AllegroCoinsDataCollector extends DataCollector {
 			e.printStackTrace();
 		}
 
-		path = "../webapi-client/20110116.txt";
+		path = "../webapi-client/20110117.txt";
 		try{
 			InputStream inputStream = getInput();
 			BufferedReader bufferedReader = new BufferedReader(
@@ -96,7 +96,6 @@ public class AllegroCoinsDataCollector extends DataCollector {
 		try {
 			return new FileInputStream(file);
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
