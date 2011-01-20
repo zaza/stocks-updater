@@ -11,6 +11,7 @@ import java.util.List;
 import org.apache.commons.lang.time.DateUtils;
 
 import stocks.collector.AllegroCoinsDataCollector;
+import stocks.collector.ArkaDataCollector;
 import stocks.collector.DataCollector;
 import stocks.collector.InvestorsPlDataCollector;
 import stocks.collector.StooqHistoricalDataCollector;
@@ -38,6 +39,7 @@ public class Main {
 			String file = "output/" + fund.getStooq() + "_" + sdf.format(c1.getTime()) + ".csv";
 			toCsvFile(matched, file);
 		}
+
 		// === silver
 		AllegroCoinsDataCollector allegroCoinsCollector = new AllegroCoinsDataCollector();
 		List<Data> allegroCoins = allegroCoinsCollector.collectData();
@@ -47,10 +49,23 @@ public class Main {
 		DataCollector rcsilaopen = new StooqHistoricalDataCollector("rcsilaopen", start, end, StooqHistoricalDataInterval.Daily);
 		List<Data> stooqHistData = rcsilaopen.collectData();
 		List<Data[]> matched = DataUtils.matchByDate(stooqHistData, allegroCoins);
+		// TODO: add today
 		String file = "output/" + "silver" + "_" + sdf.format(c1.getTime()) + ".csv";
 		toCsvFile(matched, file);
 
-		// === TODO: arkafrn12
+		// === arkafrn12
+		DataCollector arkafrn12Collector = new ArkaDataCollector("arka-bz-wbk-fundusz-rynku-nieruchomosci-fiz");
+		List<Data> arkafrn = arkafrn12Collector.collectData();
+		start = arkafrn.get(0).getDate();
+		today = new Date(System.currentTimeMillis());
+		end = DateUtils.truncate(today, Calendar.DAY_OF_MONTH);
+		DataCollector arkafrn12 = new StooqHistoricalDataCollector("arkafrn12", start, end, StooqHistoricalDataInterval.Daily);
+		stooqHistData = arkafrn12.collectData();
+		matched = DataUtils.matchByDate(arkafrn, stooqHistData);
+		// TODO: add today
+		file = "output/" + "arkafrn12" + "_" + sdf.format(c1.getTime()) + ".csv";
+		toCsvFile(matched, file);
+
 	}
 	
 	private static void toCsvFile(List<Data[]> matched, String filePath) throws IOException {

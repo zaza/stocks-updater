@@ -20,7 +20,6 @@ import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.xpath.XPathAPI;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -28,7 +27,9 @@ import org.w3c.tidy.Tidy;
 
 import stocks.data.Data;
 
-public class InvestorsPlDataCollector extends DataCollector {
+import com.sun.org.apache.xpath.internal.XPathAPI;
+
+public class InvestorsPlDataCollector extends XmlDataCollector {
 
 	public enum Fund {
 		Invfiz("Investors FIZ", "invfiz", "investor-fiz"), InvGold(
@@ -56,7 +57,6 @@ public class InvestorsPlDataCollector extends DataCollector {
 	}
 	
 	private String asset;
-	private Document dom;
 
 	public InvestorsPlDataCollector(String asset) {
 		this.asset = asset;
@@ -141,11 +141,4 @@ public class InvestorsPlDataCollector extends DataCollector {
 		return null;
 	}
 	*/
-	private void parseXmlFile(InputStream in) {
-		Tidy tidy = new Tidy();
-		tidy.setShowWarnings(false);
-		tidy.setQuiet(true);
-		dom = tidy.parseDOM(in, null);
-	}
-
 }
