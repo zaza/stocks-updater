@@ -7,19 +7,16 @@ import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import stocks.collector.DataCollector;
-import stocks.collector.InvestorsPlDataCollector;
 import stocks.collector.StooqDataCollector;
 import stocks.collector.StooqHistoricalDataCollector;
 import stocks.collector.StooqHistoricalDataInterval;
 import stocks.data.Data;
-import stocks.data.StooqData;
+import stocks.data.StooqCurrentData;
 import stocks.data.StooqHistoricalData;
 
 
@@ -56,34 +53,68 @@ public class StooqDataCollectorTests {
 		assertEquals(2050f, first.getLow(), 0);
 		assertEquals(2070f, first.getClose(), 0);
 		assertEquals(2070f, first.getValue(), 0);
-		assertEquals(7, first.getVolume(), 0);
+		assertEquals(7, first.getVolume());
 	}
 
 	@Test
-	@Ignore
-	public void testStooqToday() throws Exception {
-		DataCollector invfizInvestorsPl = new StooqDataCollector("invfiz",
-				new Date(System.currentTimeMillis()));
-		List data = invfizInvestorsPl.collectData();
-		// TODO: ignore empty result on Sat and Sun
-		for (Iterator iterator = data.iterator(); iterator.hasNext();) {
-			StooqData d = (StooqData) iterator.next();
-			d.getDate();
-			d.getValue();
-			d.getAsk();
-			d.getBid();
-			d.getVolume();
-		}
+	public void testArkafrn12StooqLast() throws Exception {
+		DataCollector arkafrnStooq = new StooqDataCollector("arkafrn12"){
+			protected InputStream getInput() {
+				File file = new File(
+						"test/data/stooq--arkafrn12--wykres.html");
+				try {
+					return new FileInputStream(file);
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				return null;
+			};
+		};
+		List<Data> data = arkafrnStooq.collectData();
+		assertEquals(1, data.size());
+		
+		StooqCurrentData first = (StooqCurrentData) data.get(0);
+		assertEquals("arkafrn12", first.getName());
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		Date d = df.parse("2011-01-18");
+		assertEquals(d, first.getDate());
+		// TODO:
+//		assertEquals(104f, first.getOpen(), 0);
+		assertEquals(104f, first.getValue(), 0);
+//		assertEquals(104f, first.getAsk(), 0);
+//		assertEquals(102.5f, first.getBid(), 0);
+//		assertEquals(393, first.getVolume());
 	}
+	
 	@Test
-	@Ignore
-	public void testStooqLast() throws Exception {
-		DataCollector invfizInvestorsPl = new StooqDataCollector("INVFIZ");
-		List data = invfizInvestorsPl.collectData();
-		for (Iterator iterator = data.iterator(); iterator.hasNext();) {
-			Data d = (Data) iterator.next();
-			d.getDate();
-			d.getValue();
-		}
+	public void testRcsilaopenStooqLast() throws Exception {
+		DataCollector arkafrnStooq = new StooqDataCollector("rcsilaopen"){
+			protected InputStream getInput() {
+				File file = new File(
+						"test/data/stooq--rcsilaopen--wykres.html");
+				try {
+					return new FileInputStream(file);
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				return null;
+			};
+		};
+		List<Data> data = arkafrnStooq.collectData();
+		assertEquals(1, data.size());
+		
+		StooqCurrentData first = (StooqCurrentData) data.get(0);
+		assertEquals("rcsilaopen", first.getName());
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		Date d = df.parse("2011-01-21");
+		assertEquals(d, first.getDate());
+		// TODO:
+//		assertEquals(104f, first.getOpen(), 0);
+		assertEquals(77.8f, first.getValue(), 0);
+//		assertEquals(104f, first.getAsk(), 0);
+//		assertEquals(102.5f, first.getBid(), 0);
+//		assertEquals(393, first.getVolume());
 	}
 }

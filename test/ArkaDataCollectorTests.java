@@ -19,7 +19,7 @@ import stocks.collector.StooqDataCollector;
 import stocks.collector.StooqHistoricalDataCollector;
 import stocks.collector.StooqHistoricalDataInterval;
 import stocks.data.Data;
-import stocks.data.StooqData;
+import stocks.data.StooqCurrentData;
 import stocks.data.StooqHistoricalData;
 
 public class ArkaDataCollectorTests {
