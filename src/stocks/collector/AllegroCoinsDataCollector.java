@@ -27,6 +27,7 @@ public class AllegroCoinsDataCollector extends DataCollector {
 	@Override
 	public List<Data> collectData() {
 		List<Data> result = new ArrayList<Data>();
+		// archived data in csv
 		path = "data/allegro-srebrne-uncje.csv";
 		try {
 			InputStream inputStream = getInput();
@@ -52,13 +53,17 @@ public class AllegroCoinsDataCollector extends DataCollector {
 			e.printStackTrace();
 		}
 
-		path = "../webapi-client/20110117.txt";
+		// data collected by webapi-client
+		path = "../webapi-client/output/merged.txt";
 		try{
 			InputStream inputStream = getInput();
 			BufferedReader bufferedReader = new BufferedReader(
 					new InputStreamReader(inputStream));
 			String line;
 			while ((line = bufferedReader.readLine()) != null) {
+				line = line.trim();
+				if (line.equals(""))
+					continue; // skip empty lines
 				String[] split = line.split(";");
 				DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 				Date d = df.parse(split[0]);
@@ -93,6 +98,9 @@ public class AllegroCoinsDataCollector extends DataCollector {
 	@Override
 	protected InputStream getInput() throws IOException {
 		File file = new File(path);
+		System.out.println("Warning: using archive data from a file ("
+				+ file.getName() + "), last modified on "
+				+ new Date(file.lastModified()));
 		try {
 			return new FileInputStream(file);
 		} catch (FileNotFoundException e) {

@@ -81,6 +81,8 @@ public class Main {
 		matched = DataUtils.matchByDate(arkafrn, stooqHistData);
 		file = "output/" + "arkafrn12" + "_" + sdf.format(c1.getTime()) + ".csv";
 		toCsvFile(matched, file);
+
+		System.out.println("Done.");
 	}
 	
 	private static void toCsvFile(List<Data[]> matched, String filePath) throws IOException {
