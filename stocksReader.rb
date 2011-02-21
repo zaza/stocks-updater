@@ -23,8 +23,7 @@ funds = [
 "UniFundusze FIO Sub. UniKorona Pieniężny",
 "ING Parasol FIO Sub. Gotówkowy",
 "SKARBIEC-ALTERNATYWNY SFIO"];
-#RCSILAOPEN = monety, uncja srebra w pln
-stooqs = [ "ARKAFRN12", "RCSILAOPEN"]
+stooqs = [ "ARKAFRN12", "RCCRUAOPEN"]
 tickers = [ "BMP", "COG", "INK", "IPL", "VST", "ZAP"]
 currencies = [ "USD", "AUD", "EUR", "CHF" ]
 investors = ["Investor FIZ", "Investor Gold FIZ"]
