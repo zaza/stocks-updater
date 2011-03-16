@@ -23,7 +23,7 @@ funds = [
 "UniFundusze FIO Sub. UniKorona Pieniężny",
 "ING Parasol FIO Sub. Gotówkowy",
 "SKARBIEC-ALTERNATYWNY SFIO"];
-stooqs = [ "ARKAFRN12", "RCCRUAOPEN"]
+stooqs = [ "ARKAFRN12"]
 tickers = [ "BMP", "COG", "INK", "IPL", "VST", "ZAP"]
 currencies = [ "USD", "AUD", "EUR", "CHF" ]
 investors = ["Investor FIZ", "Investor Gold FIZ"]
