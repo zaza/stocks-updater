@@ -22,7 +22,7 @@ funds = [
 "Amplico FIO Parasol Kraj. Sub. Pieniężny",
 "UniFundusze FIO Sub. UniKorona Pieniężny",
 "ING Parasol FIO Sub. Gotówkowy",
-"SKARBIEC-ALTERNATYWNY SFIO"];
+"Alternatywny"];
 stooqs = [ "ARKAFRN12"]
 tickers = [ "BMP", "COG", "INK", "IPL", "VST", "ZAP"]
 currencies = [ "USD", "AUD", "EUR", "CHF" ]
@@ -34,12 +34,12 @@ tickers_hash = {}
 currencies_hash = {}
 investors_hash = {}
 
-# only "SKARBIEC-ALTERNATYWNY SFIO"
+# only "(Skarbiec) Alternatywny"
 page = open("http://www.skarbiec.pl/dla_klientow/notowania/").read
 doc = Hpricot(page)
 doc.search("//tr/td[@class='title']/span[@class='leftSide']/a").each do |a|
   fund = a.inner_html
-  if fund == "SKARBIEC-ALTERNATYWNY SFIO"
+  if fund == "Alternatywny"
     div = a.parent.parent.parent.at("td[@class='value']/div")
     if div.inner_html =~ /([0-9]+,[0-9]{2}) PLN/
       price = $1
