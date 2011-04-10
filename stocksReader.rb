@@ -24,7 +24,7 @@ funds = [
 "ING Parasol FIO Sub. Gotówkowy",
 "Alternatywny"];
 stooqs = [ "ARKAFRN12"]
-tickers = [ "BMP", "COG", "INK", "IPL", "VST", "ZAP"]
+tickers = [ "BMP", "INK", "VST", "ZAP"]
 currencies = [ "USD", "AUD", "EUR", "CHF" ]
 investors = ["Investor FIZ", "Investor Gold FIZ"]
 
