@@ -12,14 +12,22 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
+import javax.xml.transform.TransformerException;
+
+import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.xpath.XPathAPI;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 import stocks.collector.DataCollector;
+import stocks.collector.XmlDataCollector;
 import stocks.data.Data;
 import stocks.data.StooqHistoricalData;
 
@@ -27,7 +35,7 @@ import stocks.data.StooqHistoricalData;
  * Gather historical data from stooq.pl pages available online. 
  *
  */
-public class StooqPageHistoricalDataCollector extends DataCollector {
+public class StooqPageHistoricalDataCollector extends XmlDataCollector {
 	
 	private String asset;
 	private Date start;
@@ -46,40 +54,61 @@ public class StooqPageHistoricalDataCollector extends DataCollector {
 	public List<Data> collectData() {
 		List<Data> result = new ArrayList<Data>();
 		try {
-			InputStream inputStream = getInput()[0];
-			BufferedReader bufferedReader = new BufferedReader(
-					new InputStreamReader(inputStream));
-			String line = bufferedReader.readLine();
-			while ((line = bufferedReader.readLine()) != null) {
-				String[] split = line.split(",");
-				DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-				Date d = df.parse(split[0]);
-				float open =  Float.parseFloat(split[1]);
-				float high =  Float.parseFloat(split[2]);
-				float low =  Float.parseFloat(split[3]);
-				float close =  Float.parseFloat(split[4]);
-				int volume =  Integer.parseInt(split[5]);
-				StooqHistoricalData data = new StooqHistoricalData(d, open, high, low, close, volume, asset);
-				result.add(data);
+			InputStream[] inputStreams = getInput();
+			for (InputStream is : inputStreams) {
+				parseXmlFile(is);
+				NodeList nodes = XPathAPI.selectNodeList(dom, "//table/tbody[@id='f13' and @style='background-color:ffffff' and @align='right']/tr");
+				
+				if (nodes != null && nodes.getLength() > 0) {
+					for (int i = 0; i < nodes.getLength(); i++) {
+						Element element = (Element) nodes.item(i);
+						NodeList childNodes = element.getChildNodes();
+						// getTextContent() is not supported!
+						String date = childNodes.item(1).getFirstChild().getNodeValue();
+						DateFormat df = new SimpleDateFormat("dd MMM yyyy", Locale.US);
+						Date d = df.parse(date);
+						float open =  Float.parseFloat(childNodes.item(2).getFirstChild().getNodeValue());
+						float high =  Float.parseFloat(childNodes.item(3).getFirstChild().getNodeValue());
+						float low =  Float.parseFloat(childNodes.item(4).getFirstChild().getNodeValue());
+						float close =  Float.parseFloat(childNodes.item(5).getFirstChild().getNodeValue());
+						int volume =  Integer.parseInt(childNodes.item(6).getFirstChild().getNodeValue());
+						StooqHistoricalData data = new StooqHistoricalData(d, open, high, low, close, volume, asset);
+						result.add(data);
+					}
+				}
+				is.close();
 			}
-			inputStream.close();
 		} catch (IOException e) {
 			e.printStackTrace();
+		} catch (TransformerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		} catch (ParseException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		Collections.sort(result);
 		return result;
 	}
 	
-	// http://stooq.com/q/d/?s=invpefiz&c=0&d1=20101109&d2=20110429
 	protected InputStream[] getInput() throws IOException {
-		// TODO: combine streams if getNextPageInputStream !=null
+		List<InputStream> streams = new ArrayList<InputStream>(); 
 		HttpClient httpclient = new DefaultHttpClient();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 		HttpGet httpget = new HttpGet("http://stooq.pl/q/d/?s=" + asset
 				+ "&c=0&d1=" + sdf.format(start) + "&d2=" + sdf.format(end) + "&i="
 				+ interval.toString());
-		return new InputStream[] { httpclient.execute(httpget).getEntity().getContent()};
+		HttpResponse response = httpclient.execute(httpget);
+		int l = 1;
+		while (response.getStatusLine().getStatusCode() == 200) {
+			streams.add(response.getEntity().getContent());
+			httpget.re
+			l++;
+			httpget = new HttpGet("http://stooq.pl/q/d/?s=" + asset
+					+ "&c=0&d1=" + sdf.format(start) + "&d2=" + sdf.format(end) + "&i="
+					+ interval.toString()+"&l="+l);
+			response = httpclient.execute(httpget);
+		}
+		return streams.toArray(new InputStream[0]);
 	}
 }

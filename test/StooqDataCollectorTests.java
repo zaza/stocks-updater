@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import stocks.collector.DataCollector;
@@ -60,7 +61,7 @@ public class StooqDataCollectorTests {
 	@Test
 	public void testStooqPageHistoricalData_singlePage() throws Exception {
 		DataCollector invfizInvestorsPl = new StooqPageHistoricalDataCollector(
-				"invfiz", new Date(System.currentTimeMillis()), new Date(System
+				"invpefiz", new Date(System.currentTimeMillis()), new Date(System
 						.currentTimeMillis()),
 				StooqHistoricalDataInterval.Daily) {
 			protected InputStream[] getInput() {
@@ -94,16 +95,17 @@ public class StooqDataCollectorTests {
 	@Test
 	public void testStooqPageHistoricalData_twoPages() throws Exception {
 		DataCollector invfizInvestorsPl = new StooqPageHistoricalDataCollector(
-				"invfiz", new Date(System.currentTimeMillis()), new Date(System
+				"invpefiz", new Date(System.currentTimeMillis()), new Date(System
 						.currentTimeMillis()),
 				StooqHistoricalDataInterval.Daily) {
-			// "data/stooq--invpefiz-1--historia.html"
-			// "data/stooq--invpefiz-2--historia.html"
 			protected InputStream[] getInput() {
-				File file = new File(
+				File file1 = new File(
 						"test/data/stooq--invpefiz-1--historia.html");
+				File file2 = new File(
+						"test/data/stooq--invpefiz-2--historia.html");
 				try {
-					return new InputStream[] { new FileInputStream(file)};
+					return new InputStream[] { new FileInputStream(file1),
+							new FileInputStream(file2) };
 				} catch (FileNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

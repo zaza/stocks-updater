@@ -18,6 +18,7 @@ import stocks.collector.investors.InvestorsPlDataCollector.Fund;
 import stocks.collector.stooq.StooqDataCollector;
 import stocks.collector.stooq.StooqHistoricalDataCollector;
 import stocks.collector.stooq.StooqHistoricalDataInterval;
+import stocks.collector.stooq.StooqPageHistoricalDataCollector;
 import stocks.data.Data;
 import stocks.data.DataUtils;
 
@@ -36,7 +37,7 @@ public class Main {
 				Date start = invfizPl.get(0).getDate();
 				Date today = new Date(System.currentTimeMillis());
 				Date end = DateUtils.truncate(today, Calendar.DAY_OF_MONTH);
-				DataCollector invfiz = new StooqHistoricalDataCollector(fund.getStooq(), start, end, StooqHistoricalDataInterval.Daily);
+				DataCollector invfiz = new StooqPageHistoricalDataCollector(fund.getStooq(), start, end, StooqHistoricalDataInterval.Daily);
 				List<Data> stooqHistData = invfiz.collectData();
 				List<Data[]> matched = DataUtils.matchByDate(invfizPl, stooqHistData);
 
