@@ -20,14 +20,11 @@ import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.w3c.dom.Document;
+import org.apache.xpath.XPathAPI;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-import org.w3c.tidy.Tidy;
 
 import stocks.data.Data;
-
-import com.sun.org.apache.xpath.internal.XPathAPI;
 
 public class InvestorsPlDataCollector extends XmlDataCollector {
 
