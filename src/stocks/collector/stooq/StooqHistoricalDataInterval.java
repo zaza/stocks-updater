@@ -1,4 +1,4 @@
-package stocks.collector;
+package stocks.collector.stooq;
 public enum StooqHistoricalDataInterval {
 	Daily("d"), Weekly("w"), Monthly("m"), Quarterly("q"), Yearly("y");
 	private String internal;

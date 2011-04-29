@@ -1,4 +1,4 @@
-package stocks.collector;
+package stocks.collector.arka;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -22,6 +22,7 @@ import org.apache.xpath.XPathAPI;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import stocks.collector.XmlDataCollector;
 import stocks.data.Data;
 
 public class ArkaDataCollector extends XmlDataCollector {

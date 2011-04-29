@@ -7,8 +7,8 @@ import java.util.List;
 
 import org.junit.Test;
 
-import stocks.collector.AllegroCoinsDataCollector;
 import stocks.collector.DataCollector;
+import stocks.collector.allegro.AllegroCoinsDataCollector;
 import stocks.data.AllegroData;
 import stocks.data.Data;
 

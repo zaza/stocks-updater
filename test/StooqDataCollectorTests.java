@@ -12,9 +12,9 @@ import java.util.List;
 import org.junit.Test;
 
 import stocks.collector.DataCollector;
-import stocks.collector.StooqDataCollector;
-import stocks.collector.StooqHistoricalDataCollector;
-import stocks.collector.StooqHistoricalDataInterval;
+import stocks.collector.stooq.StooqDataCollector;
+import stocks.collector.stooq.StooqHistoricalDataCollector;
+import stocks.collector.stooq.StooqHistoricalDataInterval;
 import stocks.data.Data;
 import stocks.data.StooqCurrentData;
 import stocks.data.StooqHistoricalData;

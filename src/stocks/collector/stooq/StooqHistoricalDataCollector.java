@@ -1,4 +1,4 @@
-package stocks.collector;
+package stocks.collector.stooq;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -15,6 +15,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import stocks.collector.DataCollector;
 import stocks.data.Data;
 import stocks.data.StooqHistoricalData;
 

@@ -1,4 +1,4 @@
-package stocks.collector;
+package stocks.collector.allegro;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -16,6 +16,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import stocks.collector.DataCollector;
 import stocks.data.AllegroData;
 import stocks.data.Data;
 import stocks.data.DataUtils;
