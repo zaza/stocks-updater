@@ -25,6 +25,10 @@ import stocks.collector.XmlDataCollector;
 import stocks.data.Data;
 import stocks.data.StooqCurrentData;
 
+/**
+ * Get actual data for an asset from stooq.pl
+ *
+ */
 public class StooqDataCollector extends XmlDataCollector {
 
 	private String asset;
@@ -37,7 +41,7 @@ public class StooqDataCollector extends XmlDataCollector {
 	public List<Data> collectData() {
 		List<Data> result = new ArrayList<Data>();
 		try {
-			InputStream inputStream = getInput();
+			InputStream inputStream = getInput()[0];
 			parseXmlFile(inputStream);
 
 			String value = null;
@@ -70,13 +74,13 @@ public class StooqDataCollector extends XmlDataCollector {
 		return result;
 	}
 
-	protected InputStream getInput() throws IOException {
+	protected InputStream[] getInput() throws IOException {
 		HttpClient httpclient = new DefaultHttpClient();
 		HttpGet httpget = new HttpGet("http://stooq.pl/q/?s=" + asset);
 		ResponseHandler<String> responseHandler = new BasicResponseHandler();
 		String responseBody = httpclient.execute(httpget, responseHandler);
 		httpclient.getConnectionManager().shutdown();
-		return new ByteArrayInputStream(responseBody.getBytes());
+		return new InputStream[] { new ByteArrayInputStream(responseBody.getBytes())};
 	}
 
 }

@@ -19,6 +19,10 @@ import stocks.collector.DataCollector;
 import stocks.data.Data;
 import stocks.data.StooqHistoricalData;
 
+/**
+ * Gather historical data from stooq.pl stored in a .csv file available online. 
+ *
+ */
 public class StooqHistoricalDataCollector extends DataCollector {
 
 	private String asset;
@@ -38,7 +42,7 @@ public class StooqHistoricalDataCollector extends DataCollector {
 	public List<Data> collectData() {
 		List<Data> result = new ArrayList<Data>();
 		try {
-			InputStream inputStream = getInput();
+			InputStream inputStream = getInput()[0];
 			BufferedReader bufferedReader = new BufferedReader(
 					new InputStreamReader(inputStream));
 			String line = bufferedReader.readLine();
@@ -64,11 +68,11 @@ public class StooqHistoricalDataCollector extends DataCollector {
 		return result;
 	}
 	
-	protected InputStream getInput() throws IOException {
+	protected InputStream[] getInput() throws IOException {
 		File file = new File("data/" + asset + "_" + interval.toString()
 				+ ".csv");
 		try {
-			return new FileInputStream(file);
+			return new InputStream[] { new FileInputStream(file)};
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

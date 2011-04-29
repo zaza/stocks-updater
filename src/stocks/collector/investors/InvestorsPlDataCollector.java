@@ -64,7 +64,7 @@ public class InvestorsPlDataCollector extends XmlDataCollector {
 	public List<Data> collectData() {
 		List<Data> result = new ArrayList<Data>();
 		try {
-			InputStream inputStream = getInput();
+			InputStream inputStream = getInput()[0];
 			parseXmlFile(inputStream);
 			NodeList nodes = XPathAPI.selectNodeList(dom, "//div[@class='resultsYear']/table/tr");
 			if (nodes == null || nodes.getLength() == 0)
@@ -97,14 +97,14 @@ public class InvestorsPlDataCollector extends XmlDataCollector {
 		return result;
 	}
 	
-	protected InputStream getInput() throws IOException {
+	protected InputStream[] getInput() throws IOException {
 		HttpClient httpclient = new DefaultHttpClient();
 		HttpGet httpget = new HttpGet("http://tfi.investors.pl/" + asset
 				+ "/wyniki.html");
 		ResponseHandler<String> responseHandler = new BasicResponseHandler();
 		String responseBody = httpclient.execute(httpget, responseHandler);
 		httpclient.getConnectionManager().shutdown();
-		return new ByteArrayInputStream(responseBody.getBytes());
+		return new InputStream[] { new ByteArrayInputStream(responseBody.getBytes())};
 	}
 	
 	/*

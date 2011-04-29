@@ -28,10 +28,10 @@ public class ArkaDataCollectorTests {
 	public void testArkafrn12() throws Exception {
 		DataCollector invfizInvestorsPl = new ArkaDataCollector(
 				"arka-bz-wbk-fundusz-rynku-nieruchomosci-fiz") {
-			protected InputStream getInput() {
+			protected InputStream[] getInput() {
 				File file = new File("test/data/arka-bz-wbk-fundusz-rynku-nieruchomosci-fiz.html");
 				try {
-					return new FileInputStream(file);
+					return new InputStream[] { new FileInputStream(file)};
 				} catch (FileNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

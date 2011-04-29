@@ -15,7 +15,7 @@ public abstract class XmlDataCollector extends DataCollector {
 	
 	public abstract List<Data> collectData();
 
-	protected abstract InputStream getInput() throws IOException;
+	protected abstract InputStream[] getInput() throws IOException;
 	
 	protected void parseXmlFile(InputStream in) {
 		Tidy tidy = new Tidy();

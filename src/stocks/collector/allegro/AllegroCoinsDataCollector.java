@@ -30,7 +30,7 @@ public class AllegroCoinsDataCollector extends DataCollector {
 		List<Data> result = new ArrayList<Data>();
 		path = "data/allegro-srebrne-uncje.csv";
 		try {
-			InputStream inputStream = getInput();
+			InputStream inputStream = getInput()[0];
 			BufferedReader bufferedReader = new BufferedReader(
 					new InputStreamReader(inputStream));
 			String line;
@@ -55,7 +55,7 @@ public class AllegroCoinsDataCollector extends DataCollector {
 
 		path = findLatestAllegroNotWonFile("../webapi-client/output/");
 		try{
-			InputStream inputStream = getInput();
+			InputStream inputStream = getInput()[0];
 			BufferedReader bufferedReader = new BufferedReader(
 					new InputStreamReader(inputStream));
 			String line;
@@ -108,10 +108,10 @@ public class AllegroCoinsDataCollector extends DataCollector {
 	}
 	
 	@Override
-	protected InputStream getInput() throws IOException {
+	protected InputStream[] getInput() throws IOException {
 		File file = new File(path);
 		try {
-			return new FileInputStream(file);
+			return new InputStream[] { new FileInputStream(file) };
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
