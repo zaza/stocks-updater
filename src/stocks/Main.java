@@ -29,6 +29,7 @@ public class Main {
 
 		// === investors.pl
 		for (Fund fund : Fund.values()) {
+			System.out.println("Processing '" + fund + "'...");
 			DataCollector invfizInvestorsCollector = new InvestorsPlDataCollector(fund.getInvestorsPl());
 			List<Data> invfizPl = invfizInvestorsCollector.collectData();
 			Date start = invfizPl.get(0).getDate();
@@ -49,6 +50,7 @@ public class Main {
 		}
 
 		// === silver
+		System.out.println("Processing 'silver'...");
 		AllegroCoinsDataCollector allegroCoinsCollector = new AllegroCoinsDataCollector();
 		List<Data> allegroCoins = allegroCoinsCollector.collectData();
 		Date start = allegroCoins.get(0).getDate();
@@ -66,6 +68,7 @@ public class Main {
 		toCsvFile(matched, file);
 
 		// === arkafrn12
+		System.out.println("Processing 'arkafrn12'...");
 		DataCollector arkafrn12Collector = new ArkaDataCollector("arka-bz-wbk-fundusz-rynku-nieruchomosci-fiz");
 		List<Data> arkafrn = arkafrn12Collector.collectData();
 		start = arkafrn.get(0).getDate();
@@ -81,6 +84,7 @@ public class Main {
 		matched = DataUtils.matchByDate(arkafrn, stooqHistData);
 		file = "output/" + "arkafrn12" + "_" + sdf.format(c1.getTime()) + ".csv";
 		toCsvFile(matched, file);
+		System.out.println("Done.");
 	}
 	
 	private static void toCsvFile(List<Data[]> matched, String filePath) throws IOException {
