@@ -33,7 +33,7 @@ public class AllegroCoinsDataCollector extends DataCollector {
 			BufferedReader bufferedReader = new BufferedReader(
 					new InputStreamReader(inputStream));
 			String line;
-			while ((line = bufferedReader.readLine()) != null) {
+			while ((line = bufferedReader.readLine()) != null && !line.equals("")) {
 				String[] split = line.split(";");
 				DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 				Date d = df.parse(split[0]);
@@ -52,7 +52,7 @@ public class AllegroCoinsDataCollector extends DataCollector {
 			e.printStackTrace();
 		}
 
-		path = "../webapi-client/20110117.txt";
+		path = findLatestAllegroNotWonFile("../webapi-client/output/");
 		try{
 			InputStream inputStream = getInput();
 			BufferedReader bufferedReader = new BufferedReader(
@@ -88,6 +88,22 @@ public class AllegroCoinsDataCollector extends DataCollector {
 				return true;
 		}
 		return false;
+	}
+	
+	private String findLatestAllegroNotWonFile(String outputFolder) {
+		File rootFile = new File(outputFolder);
+		if (rootFile.isDirectory()) {
+			String[] list = rootFile.list();
+			if (list.length > 0) {
+				String latest = "";
+				for (int i = 0; i < list.length; i++) {
+					if (list[i].endsWith(".txt") && list[i].compareTo(latest) > 0)
+						latest = list[i];
+				}
+				return outputFolder + "/" + latest;
+			}
+		}
+		return null;
 	}
 	
 	@Override
