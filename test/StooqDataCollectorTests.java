@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -62,7 +63,7 @@ public class StooqDataCollectorTests {
 	}
 
 	@Test 
-	public void testStooqPageHistoricalDataCollector_hasNextPage() throws FileNotFoundException {
+	public void testStooqPageHistoricalDataCollector_hasNextPage() throws FileNotFoundException, UnsupportedEncodingException {
 		File file = new File("test/data/stooq--invpefiz-1p--historia.html");
 		Document doc = XmlDataCollector.parseXmlFile(new FileInputStream(file));
 		assertFalse(StooqPageHistoricalDataCollector.hasNextPage(doc));
@@ -83,7 +84,7 @@ public class StooqDataCollectorTests {
 						.currentTimeMillis()),
 				StooqHistoricalDataInterval.Daily) {
 			@Override
-			protected Document[] getDocuments() {
+			protected Document[] getDocuments() throws UnsupportedEncodingException {
 				File file = new File(
 						"test/data/stooq--invpefiz-1p--historia.html");
 				try {
@@ -118,7 +119,7 @@ public class StooqDataCollectorTests {
 						.currentTimeMillis()),
 				StooqHistoricalDataInterval.Daily) {
 			@Override
-			protected Document[] getDocuments() {
+			protected Document[] getDocuments() throws UnsupportedEncodingException {
 				File file1 = new File(
 						"test/data/stooq--invpefiz-1--historia.html");
 				File file2 = new File(

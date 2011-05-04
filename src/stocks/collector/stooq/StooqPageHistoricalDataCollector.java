@@ -1,7 +1,6 @@
 package stocks.collector.stooq;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -60,7 +59,7 @@ public class StooqPageHistoricalDataCollector extends XmlDataCollector {
 						NodeList childNodes = element.getChildNodes();
 						// getTextContent() is not supported!
 						String date = childNodes.item(1).getFirstChild().getNodeValue();
-						DateFormat df = new SimpleDateFormat("dd MMM yyyy", Locale.US);
+						DateFormat df = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
 						Date d = df.parse(date);
 						float open =  Float.parseFloat(childNodes.item(2).getFirstChild().getNodeValue());
 						float high =  Float.parseFloat(childNodes.item(3).getFirstChild().getNodeValue());
