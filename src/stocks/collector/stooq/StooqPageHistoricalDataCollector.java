@@ -1,10 +1,7 @@
 package stocks.collector.stooq;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -18,18 +15,16 @@ import javax.xml.transform.TransformerException;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.xpath.XPathAPI;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import stocks.collector.DataCollector;
 import stocks.collector.XmlDataCollector;
 import stocks.data.Data;
 import stocks.data.StooqHistoricalData;
+
+import com.sun.org.apache.xpath.internal.XPathAPI;
 
 /**
  * Gather historical data from stooq.pl pages available online. 
@@ -102,7 +97,6 @@ public class StooqPageHistoricalDataCollector extends XmlDataCollector {
 		int l = 1;
 		while (response.getStatusLine().getStatusCode() == 200) {
 			streams.add(response.getEntity().getContent());
-			httpget.re
 			l++;
 			httpget = new HttpGet("http://stooq.pl/q/d/?s=" + asset
 					+ "&c=0&d1=" + sdf.format(start) + "&d2=" + sdf.format(end) + "&i="
