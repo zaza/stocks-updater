@@ -21,7 +21,6 @@ funds = [
 "UniFundusze FIO Sub. UniDolar Obligacje",
 "Amplico FIO Parasol Kraj. Sub. Pieniężny",
 "UniFundusze FIO Sub. UniKorona Pieniężny",
-"ING Parasol FIO Sub. Gotówkowy",
 "Alternatywny"];
 stooqs = [ "ARKAFRN12"]
 tickers = [ "BMP", "INK", "VST", "ZAP"]
