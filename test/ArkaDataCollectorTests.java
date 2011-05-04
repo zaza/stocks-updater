@@ -7,20 +7,13 @@ import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import org.junit.Test;
 
 import stocks.collector.DataCollector;
 import stocks.collector.arka.ArkaDataCollector;
-import stocks.collector.investors.InvestorsPlDataCollector;
-import stocks.collector.stooq.StooqDataCollector;
-import stocks.collector.stooq.StooqHistoricalDataCollector;
-import stocks.collector.stooq.StooqHistoricalDataInterval;
 import stocks.data.Data;
-import stocks.data.StooqCurrentData;
-import stocks.data.StooqHistoricalData;
 
 public class ArkaDataCollectorTests {
 
@@ -28,10 +21,12 @@ public class ArkaDataCollectorTests {
 	public void testArkafrn12() throws Exception {
 		DataCollector invfizInvestorsPl = new ArkaDataCollector(
 				"arka-bz-wbk-fundusz-rynku-nieruchomosci-fiz") {
-			protected InputStream[] getInput() {
-				File file = new File("test/data/arka-bz-wbk-fundusz-rynku-nieruchomosci-fiz.html");
+			@Override
+			protected InputStream getInput() {
+				File file = new File(
+						"test/data/arka-bz-wbk-fundusz-rynku-nieruchomosci-fiz.html");
 				try {
-					return new InputStream[] { new FileInputStream(file)};
+					return new FileInputStream(file);
 				} catch (FileNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -43,7 +38,8 @@ public class ArkaDataCollectorTests {
 		assertEquals(26, data.size());
 
 		Data first = data.get(0);
-		assertEquals("arka-bz-wbk-fundusz-rynku-nieruchomosci-fiz", first.getName());
+		assertEquals("arka-bz-wbk-fundusz-rynku-nieruchomosci-fiz", first
+				.getName());
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 		Date d = df.parse("2004-9-30");
 		assertEquals(d, first.getDate());

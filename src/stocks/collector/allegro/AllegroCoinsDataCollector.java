@@ -23,14 +23,12 @@ import stocks.data.DataUtils;
 
 public class AllegroCoinsDataCollector extends DataCollector {
 	
-	String path;
 	
 	@Override
 	public List<Data> collectData() {
 		List<Data> result = new ArrayList<Data>();
-		path = "data/allegro-srebrne-uncje.csv";
 		try {
-			InputStream inputStream = getInput()[0];
+			InputStream inputStream = getInput("data/allegro-srebrne-uncje.csv");
 			BufferedReader bufferedReader = new BufferedReader(
 					new InputStreamReader(inputStream));
 			String line;
@@ -53,9 +51,8 @@ public class AllegroCoinsDataCollector extends DataCollector {
 			e.printStackTrace();
 		}
 
-		path = findLatestAllegroNotWonFile("../webapi-client/output/");
 		try{
-			InputStream inputStream = getInput()[0];
+			InputStream inputStream = getInput(findLatestAllegroNotWonFile("../webapi-client/output/"));
 			BufferedReader bufferedReader = new BufferedReader(
 					new InputStreamReader(inputStream));
 			String line;
@@ -107,11 +104,10 @@ public class AllegroCoinsDataCollector extends DataCollector {
 		return null;
 	}
 	
-	@Override
-	protected InputStream[] getInput() throws IOException {
+	private InputStream getInput(String path) throws IOException {
 		File file = new File(path);
 		try {
-			return new InputStream[] { new FileInputStream(file) };
+			return new FileInputStream(file);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}

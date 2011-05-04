@@ -42,7 +42,7 @@ public class StooqHistoricalDataCollector extends DataCollector {
 	public List<Data> collectData() {
 		List<Data> result = new ArrayList<Data>();
 		try {
-			InputStream inputStream = getInput()[0];
+			InputStream inputStream = getInput();
 			BufferedReader bufferedReader = new BufferedReader(
 					new InputStreamReader(inputStream));
 			String line = bufferedReader.readLine();
@@ -68,11 +68,11 @@ public class StooqHistoricalDataCollector extends DataCollector {
 		return result;
 	}
 	
-	protected InputStream[] getInput() throws IOException {
+	protected InputStream getInput() throws IOException {
 		File file = new File("data/" + asset + "_" + interval.toString()
 				+ ".csv");
 		try {
-			return new InputStream[] { new FileInputStream(file)};
+			return new FileInputStream(file);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

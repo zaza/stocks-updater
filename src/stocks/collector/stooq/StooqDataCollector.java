@@ -17,6 +17,7 @@ import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
@@ -42,8 +43,8 @@ public class StooqDataCollector extends XmlDataCollector {
 	public List<Data> collectData() {
 		List<Data> result = new ArrayList<Data>();
 		try {
-			InputStream inputStream = getInput()[0];
-			parseXmlFile(inputStream);
+			InputStream inputStream = getInput();
+			Document dom = parseXmlFile(inputStream);
 
 			String value = null;
 			NodeList nodes = XPathAPI.selectNodeList(dom, "//span[@id='aq_" + asset + "_c2|3']");
@@ -75,13 +76,13 @@ public class StooqDataCollector extends XmlDataCollector {
 		return result;
 	}
 
-	protected InputStream[] getInput() throws IOException {
+	protected InputStream getInput() throws IOException {
 		HttpClient httpclient = new DefaultHttpClient();
 		HttpGet httpget = new HttpGet("http://stooq.pl/q/?s=" + asset);
 		ResponseHandler<String> responseHandler = new BasicResponseHandler();
 		String responseBody = httpclient.execute(httpget, responseHandler);
 		httpclient.getConnectionManager().shutdown();
-		return new InputStream[] { new ByteArrayInputStream(responseBody.getBytes())};
+		return new ByteArrayInputStream(responseBody.getBytes());
 	}
 
 }

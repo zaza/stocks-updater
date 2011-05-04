@@ -18,6 +18,7 @@ import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
@@ -51,6 +52,11 @@ public class InvestorsPlDataCollector extends XmlDataCollector {
 		public String getInvestorsPl() {
 			return investorsPl;
 		}
+		
+		@Override
+		public String toString() {
+			return fullName;
+		}
 	}
 	
 	private String asset;
@@ -63,8 +69,8 @@ public class InvestorsPlDataCollector extends XmlDataCollector {
 	public List<Data> collectData() {
 		List<Data> result = new ArrayList<Data>();
 		try {
-			InputStream inputStream = getInput()[0];
-			parseXmlFile(inputStream);
+			InputStream inputStream = getInput();
+			Document dom = parseXmlFile(inputStream);
 			NodeList nodes = XPathAPI.selectNodeList(dom, "//div[@class='resultsYear']/table/tr");
 			if (nodes == null || nodes.getLength() == 0)
 				// results still in one table
@@ -96,14 +102,14 @@ public class InvestorsPlDataCollector extends XmlDataCollector {
 		return result;
 	}
 	
-	protected InputStream[] getInput() throws IOException {
+	protected InputStream getInput() throws IOException {
 		HttpClient httpclient = new DefaultHttpClient();
 		HttpGet httpget = new HttpGet("http://tfi.investors.pl/" + asset
 				+ "/wyniki.html");
 		ResponseHandler<String> responseHandler = new BasicResponseHandler();
 		String responseBody = httpclient.execute(httpget, responseHandler);
 		httpclient.getConnectionManager().shutdown();
-		return new InputStream[] { new ByteArrayInputStream(responseBody.getBytes())};
+		return new ByteArrayInputStream(responseBody.getBytes());
 	}
 	
 	/*

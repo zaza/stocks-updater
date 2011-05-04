@@ -18,6 +18,7 @@ import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
@@ -38,8 +39,8 @@ public class ArkaDataCollector extends XmlDataCollector {
 	public List<Data> collectData() {
 		List<Data> result = new ArrayList<Data>();
 		try {
-			InputStream inputStream = getInput()[0];
-			parseXmlFile(inputStream);
+			InputStream inputStream = getInput();
+			Document dom = parseXmlFile(inputStream);
 			NodeList nodes = XPathAPI.selectNodeList(dom, "//table[@class='krytable']/tbody/tr[position()>1]");
 			if (nodes != null && nodes.getLength() > 0) {
 				for (int i = 0; i < nodes.getLength(); i++) {
@@ -70,8 +71,7 @@ public class ArkaDataCollector extends XmlDataCollector {
 		return result;
 	}
 
-	@Override
-	protected InputStream[] getInput() throws IOException {
+	protected InputStream getInput() throws IOException {
 		HttpClient httpclient = new DefaultHttpClient();
 		HttpGet httpget = new HttpGet(
 				"http://arka.pl/produkty/fundusze-inwestycyjne-zamkniete/"
@@ -79,7 +79,7 @@ public class ArkaDataCollector extends XmlDataCollector {
 		ResponseHandler<String> responseHandler = new BasicResponseHandler();
 		String responseBody = httpclient.execute(httpget, responseHandler);
 		httpclient.getConnectionManager().shutdown();
-		return new InputStream[] {new ByteArrayInputStream(responseBody.getBytes())};
+		return new ByteArrayInputStream(responseBody.getBytes());
 	}
 
 }

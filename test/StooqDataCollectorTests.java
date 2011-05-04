@@ -1,4 +1,6 @@
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -9,10 +11,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import org.junit.Ignore;
 import org.junit.Test;
+import org.w3c.dom.Document;
 
 import stocks.collector.DataCollector;
+import stocks.collector.XmlDataCollector;
 import stocks.collector.stooq.StooqDataCollector;
 import stocks.collector.stooq.StooqHistoricalDataCollector;
 import stocks.collector.stooq.StooqHistoricalDataInterval;
@@ -20,7 +23,6 @@ import stocks.collector.stooq.StooqPageHistoricalDataCollector;
 import stocks.data.Data;
 import stocks.data.StooqCurrentData;
 import stocks.data.StooqHistoricalData;
-
 
 public class StooqDataCollectorTests {
 
@@ -30,11 +32,12 @@ public class StooqDataCollectorTests {
 				"invfiz", new Date(System.currentTimeMillis()), new Date(System
 						.currentTimeMillis()),
 				StooqHistoricalDataInterval.Daily) {
-			protected InputStream[] getInput() {
+			@Override
+			protected InputStream getInput() {
 				File file = new File(
 						"data/invfiz_d.csv");
 				try {
-					return new InputStream[] { new FileInputStream(file)};
+					return new FileInputStream(file);
 				} catch (FileNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -58,17 +61,33 @@ public class StooqDataCollectorTests {
 		assertEquals(7, first.getVolume());
 	}
 
+	@Test 
+	public void testStooqPageHistoricalDataCollector_hasNextPage() throws FileNotFoundException {
+		File file = new File("test/data/stooq--invpefiz-1p--historia.html");
+		Document doc = XmlDataCollector.parseXmlFile(new FileInputStream(file));
+		assertFalse(StooqPageHistoricalDataCollector.hasNextPage(doc));
+		
+		file = new File("test/data/stooq--invpefiz-1--historia.html");
+		doc = XmlDataCollector.parseXmlFile(new FileInputStream(file));
+		assertTrue(StooqPageHistoricalDataCollector.hasNextPage(doc));
+		
+		file = new File("test/data/stooq--invpefiz-2--historia.html");
+		doc = XmlDataCollector.parseXmlFile(new FileInputStream(file));
+		assertFalse(StooqPageHistoricalDataCollector.hasNextPage(doc));
+	}
+	
 	@Test
 	public void testStooqPageHistoricalData_singlePage() throws Exception {
 		DataCollector invfizInvestorsPl = new StooqPageHistoricalDataCollector(
 				"invpefiz", new Date(System.currentTimeMillis()), new Date(System
 						.currentTimeMillis()),
 				StooqHistoricalDataInterval.Daily) {
-			protected InputStream[] getInput() {
+			@Override
+			protected Document[] getDocuments() {
 				File file = new File(
 						"test/data/stooq--invpefiz-1p--historia.html");
 				try {
-					return new InputStream[] { new FileInputStream(file)};
+					return new Document[]{parseXmlFile(new FileInputStream(file))};
 				} catch (FileNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -98,14 +117,16 @@ public class StooqDataCollectorTests {
 				"invpefiz", new Date(System.currentTimeMillis()), new Date(System
 						.currentTimeMillis()),
 				StooqHistoricalDataInterval.Daily) {
-			protected InputStream[] getInput() {
+			@Override
+			protected Document[] getDocuments() {
 				File file1 = new File(
 						"test/data/stooq--invpefiz-1--historia.html");
 				File file2 = new File(
 						"test/data/stooq--invpefiz-2--historia.html");
 				try {
-					return new InputStream[] { new FileInputStream(file1),
-							new FileInputStream(file2) };
+					return new Document[]{
+							parseXmlFile(new FileInputStream(file1)),
+							parseXmlFile(new FileInputStream(file2))};
 				} catch (FileNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -132,11 +153,12 @@ public class StooqDataCollectorTests {
 	@Test
 	public void testArkafrn12StooqLast() throws Exception {
 		DataCollector arkafrnStooq = new StooqDataCollector("arkafrn12"){
-			protected InputStream[] getInput() {
+			@Override
+			protected InputStream getInput() {
 				File file = new File(
 						"test/data/stooq--arkafrn12--wykres.html");
 				try {
-					return new InputStream[] { new FileInputStream(file)};
+					return new FileInputStream(file);
 				} catch (FileNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -163,11 +185,12 @@ public class StooqDataCollectorTests {
 	@Test
 	public void testRcsilaopenStooqLast() throws Exception {
 		DataCollector arkafrnStooq = new StooqDataCollector("rcsilaopen"){
-			protected InputStream[] getInput() {
+			@Override
+			protected InputStream getInput() {
 				File file = new File(
 						"test/data/stooq--rcsilaopen--wykres.html");
 				try {
-					return new InputStream[] { new FileInputStream(file)};
+					return new FileInputStream(file);
 				} catch (FileNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

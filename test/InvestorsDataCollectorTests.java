@@ -28,10 +28,10 @@ public class InvestorsDataCollectorTests {
 	public void testInvestors() throws Exception {
 		DataCollector invfizInvestorsPl = new InvestorsPlDataCollector(
 				"investor-fiz") {
-			protected InputStream[] getInput() {
+			protected InputStream getInput() {
 				File file = new File("test/data/investors-fiz--wyniki.html");
 				try {
-					return new InputStream[] { new FileInputStream(file)};
+					return new FileInputStream(file);
 				} catch (FileNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -55,11 +55,11 @@ public class InvestorsDataCollectorTests {
 	public void testInvestorsGold() throws Exception {
 		DataCollector invfizInvestorsPl = new InvestorsPlDataCollector(
 				"investor-gold-fiz") {
-			protected InputStream[] getInput() {
+			protected InputStream getInput() {
 				File file = new File(
 						"test/data/investors-gold-fiz--wyniki.html");
 				try {
-					return new InputStream[] { new FileInputStream(file)};
+					return new FileInputStream(file);
 				} catch (FileNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -83,11 +83,11 @@ public class InvestorsDataCollectorTests {
 	public void testInvestorsCee() throws Exception {
 		DataCollector invfizInvestorsPl = new InvestorsPlDataCollector(
 				"investor-cee-fiz") {
-			protected InputStream[] getInput() {
+			protected InputStream getInput() {
 				File file = new File(
 						"test/data/investors-cee-fiz--wyniki.html");
 				try {
-					return new InputStream[] { new FileInputStream(file)};
+					return new FileInputStream(file);
 				} catch (FileNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -111,11 +111,11 @@ public class InvestorsDataCollectorTests {
 	public void testInvestorsPe() throws Exception {
 		DataCollector invfizInvestorsPl = new InvestorsPlDataCollector(
 				"investor-pe-fiz") {
-			protected InputStream[] getInput() {
+			protected InputStream getInput() {
 				File file = new File(
 						"test/data/investors-pe-fiz--wyniki.html");
 				try {
-					return new InputStream[] { new FileInputStream(file)};
+					return new FileInputStream(file);
 				} catch (FileNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -138,11 +138,11 @@ public class InvestorsDataCollectorTests {
 	public void testInvestorsProperty() throws Exception {
 		DataCollector invfizInvestorsPl = new InvestorsPlDataCollector(
 				"investor-property-fiz") {
-			protected InputStream[] getInput() {
+			protected InputStream getInput() {
 				File file = new File(
 						"test/data/investors-property-fiz--wyniki.html");
 				try {
-					return new InputStream[] { new FileInputStream(file)};
+					return new FileInputStream(file);
 				} catch (FileNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

@@ -1,6 +1,5 @@
 package stocks.collector;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
@@ -11,16 +10,13 @@ import stocks.data.Data;
 
 public abstract class XmlDataCollector extends DataCollector {
 	
-	protected Document dom;
-	
+	@Override
 	public abstract List<Data> collectData();
 
-	protected abstract InputStream[] getInput() throws IOException;
-	
-	protected void parseXmlFile(InputStream in) {
+	public static Document parseXmlFile(InputStream in) {
 		Tidy tidy = new Tidy();
 		tidy.setShowWarnings(false);
 		tidy.setQuiet(true);
-		dom = tidy.parseDOM(in, null);
+		return tidy.parseDOM(in, null);
 	}
 }
