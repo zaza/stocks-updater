@@ -65,4 +65,41 @@ public class DataUtils {
 
 		return result;
 	}
+
+	public static float[] computeDiscount(List<Data[]> matched) {
+		if (matched.isEmpty())
+			return null;
+		float lowest = 0;
+		float last = 0;
+		List<Float> discounts = new ArrayList<Float>();
+		List<Float> discountsLowerThan1 = new ArrayList<Float>();
+		for (Iterator<Data[]> it = matched.iterator(); it.hasNext();) {
+			Data[] datas = (Data[]) it.next();
+			if (datas[1] != null) {
+				float discount = datas[1].getValue() / datas[0].getValue();
+				last = discount;
+				if (lowest == 0 || discount < lowest)
+					lowest = discount;
+				discounts.add(Float.valueOf(discount));
+				if (discount < 1)
+					discountsLowerThan1.add(Float.valueOf(discount));
+			}
+		}
+		float median = getMedian(discounts);
+		float medianLowerThan1 = getMedian(discountsLowerThan1);
+		return new float[]{lowest, median, medianLowerThan1, last};
+	}
+
+	private static float getMedian(List<Float> floats) {
+		if (floats.isEmpty())
+			return 0;
+		Collections.sort(floats);
+		if (floats.size() % 2 == 0) {
+			float f1 = floats.get(floats.size() / 2 - 1);
+			float f2 = floats.get(floats.size() / 2);
+			return (f1 + f2) / 2;
+		} else {
+			return floats.get(floats.size() / 2);
+		}
+	}
 }

@@ -39,16 +39,22 @@ public class Main {
 				Date end = DateUtils.truncate(today, Calendar.DAY_OF_MONTH);
 				DataCollector invfiz = new StooqPageHistoricalDataCollector(fund.getStooq(), start, end, StooqHistoricalDataInterval.Daily);
 				List<Data> stooqHistData = invfiz.collectData();
-				List<Data[]> matched = DataUtils.matchByDate(invfizPl, stooqHistData);
 
 				// add latest
 				DataCollector latestFromStooq = new StooqDataCollector(fund.getStooq());
 				List<Data> stooqData = latestFromStooq.collectData();
-				stooqHistData.add(stooqData.get(0));
+				if (stooqData.get(0).getDate().after(stooqHistData.get(stooqHistData.size() - 1).getDate()))
+					stooqHistData.add(stooqData.get(0));
 
-				// TODO: add today
+				List<Data[]> matched = DataUtils.matchByDate(invfizPl, stooqHistData);
+
+				float[] result = DataUtils.computeDiscount(matched);
+				System.out.println("Lowest:   " + result[0]);
+				System.out.println("Median:   " + result[1]);
+				System.out.println("Median<1: " + result[2]);
+				System.out.println("Last:     " + result[3]);
 				String file = "output/" + fund.getStooq() + "_" + sdf.format(c1.getTime()) + ".csv";
-				toCsvFile(matched, file);
+				toCsvFile(file, matched);
 			}
 		}
 
@@ -68,8 +74,13 @@ public class Main {
 			stooqHistData.add(stooqData.get(0));
 
 			List<Data[]> matched = DataUtils.matchByDate(stooqHistData, allegroCoins);
+			float[] result = DataUtils.computeDiscount(matched);
+			System.out.println("Lowest:   " + result[0]);
+			System.out.println("Median:   " + result[1]);
+			System.out.println("Median<1: " + result[2]);
+			System.out.println("Last:     " + result[3]);
 			String file = "output/" + "silver" + "_" + sdf.format(c1.getTime()) + ".csv";
-			toCsvFile(matched, file);
+			toCsvFile(file, matched);
 		}
 
 		// === arkafrn12
@@ -88,12 +99,17 @@ public class Main {
 			stooqHistData.add(stooqData.get(0));
 
 			List<Data[]> matched = DataUtils.matchByDate(arkafrn, stooqHistData);
+			float[] result = DataUtils.computeDiscount(matched);
+			System.out.println("Lowest:   " + result[0]);
+			System.out.println("Median:   " + result[1]);
+			System.out.println("Median<1: " + result[2]);
+			System.out.println("Last:     " + result[3]);
 			String file = "output/" + "arkafrn12" + "_" + sdf.format(c1.getTime()) + ".csv";
-			toCsvFile(matched, file);
+			toCsvFile(file, matched);
 		}
 		System.out.println("Done.");
 	}
-	
+
 	private static boolean proceed(String[] args, String string) {
 		if (args.length == 0)
 			return true;
@@ -104,7 +120,7 @@ public class Main {
 		return false;
 	}
 
-	private static void toCsvFile(List<Data[]> matched, String filePath) throws IOException {
+	private static void toCsvFile(String filePath, List<Data[]> matched) throws IOException {
 		BufferedWriter out = new BufferedWriter(new FileWriter(filePath));
 		for (Iterator<Data[]> iterator = matched.iterator(); iterator.hasNext();) {
 			Data[] datas = (Data[]) iterator.next();
