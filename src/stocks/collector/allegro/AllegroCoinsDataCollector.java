@@ -22,8 +22,7 @@ import stocks.data.Data;
 import stocks.data.DataUtils;
 
 public class AllegroCoinsDataCollector extends DataCollector {
-	
-	
+
 	@Override
 	public List<Data> collectData() {
 		List<Data> result = new ArrayList<Data>();
@@ -32,14 +31,16 @@ public class AllegroCoinsDataCollector extends DataCollector {
 			BufferedReader bufferedReader = new BufferedReader(
 					new InputStreamReader(inputStream));
 			String line;
-			while ((line = bufferedReader.readLine()) != null && !line.equals("")) {
+			while ((line = bufferedReader.readLine()) != null
+					&& !line.equals("")) {
 				String[] split = line.split(";");
 				DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 				Date d = df.parse(split[0]);
 				float price = Float.parseFloat(split[1].replace(',', '.'));
 				int id = (split.length > 2 && split[2] != null) ? Integer
 						.parseInt(split[2]) : 0;
-				String name = (split.length > 2 && split[2] != null) ? split[3]
+				String name = (split.length > 2 && split[2] != null)
+						? split[3]
 						: null;
 				AllegroData data = new AllegroData(d, price, id, name);
 				result.add(data);
@@ -51,7 +52,7 @@ public class AllegroCoinsDataCollector extends DataCollector {
 			e.printStackTrace();
 		}
 
-		try{
+		try {
 			InputStream inputStream = getInput(findLatestAllegroNotWonFile("../webapi-client/output/"));
 			BufferedReader bufferedReader = new BufferedReader(
 					new InputStreamReader(inputStream));
@@ -87,7 +88,7 @@ public class AllegroCoinsDataCollector extends DataCollector {
 		}
 		return false;
 	}
-	
+
 	private String findLatestAllegroNotWonFile(String outputFolder) {
 		File rootFile = new File(outputFolder);
 		if (rootFile.isDirectory()) {
@@ -95,7 +96,8 @@ public class AllegroCoinsDataCollector extends DataCollector {
 			if (list.length > 0) {
 				String latest = "";
 				for (int i = 0; i < list.length; i++) {
-					if (list[i].endsWith(".txt") && list[i].compareTo(latest) > 0)
+					if (list[i].endsWith(".txt")
+							&& list[i].compareTo(latest) > 0)
 						latest = list[i];
 				}
 				return outputFolder + "/" + latest;
@@ -103,7 +105,7 @@ public class AllegroCoinsDataCollector extends DataCollector {
 		}
 		return null;
 	}
-	
+
 	private InputStream getInput(String path) throws IOException {
 		File file = new File(path);
 		try {
