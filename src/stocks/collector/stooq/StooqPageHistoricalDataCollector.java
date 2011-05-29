@@ -59,7 +59,7 @@ public class StooqPageHistoricalDataCollector extends XmlDataCollector {
 						NodeList childNodes = element.getChildNodes();
 						// getTextContent() is not supported!
 						String date = childNodes.item(1).getFirstChild().getNodeValue();
-						DateFormat df = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
+						DateFormat df = new SimpleDateFormat("dd MMM yyyy", detectLocale(date));
 						Date d = df.parse(date);
 						float open =  Float.parseFloat(childNodes.item(2).getFirstChild().getNodeValue());
 						float high =  Float.parseFloat(childNodes.item(3).getFirstChild().getNodeValue());
@@ -120,5 +120,13 @@ public class StooqPageHistoricalDataCollector extends XmlDataCollector {
 			e.printStackTrace();
 		}
 		return false;
+	}
+
+	private Locale detectLocale(String date) {
+		String[] months = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Nov", "Oct", "Dec"};
+		for (String month : months)
+			if (date.indexOf(month)!=-1)
+				return Locale.ENGLISH;
+		return new Locale("pl");
 	}
 }
