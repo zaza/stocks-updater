@@ -21,9 +21,10 @@ funds = [
 "UniFundusze FIO Sub. UniDolar Obligacje",
 "Amplico FIO Parasol Kraj. Sub. Pieniężny",
 "UniFundusze FIO Sub. UniKorona Pieniężny",
+"Copernicus Dłużnych Papierów Korporacyjnych",
 "Alternatywny"];
-stooqs = [ "ARKAFRN12", "RCCRUAOPEN"]
-tickers = [ "BMP", "INK", "VST", "ZAP"]
+stooqs = [ "ARKAFRN12"]
+tickers = [ "BMP", "INK", "JSW", "VST", "ZAP"]
 currencies = [ "USD", "AUD", "EUR", "CHF" ]
 investors = ["Investor FIZ", "Investor Gold FIZ"]
 
