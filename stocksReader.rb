@@ -34,6 +34,8 @@ tickers_hash = {}
 currencies_hash = {}
 investors_hash = {}
 
+puts "Funds..."
+
 # only "(Skarbiec) Alternatywny"
 page = open("http://www.skarbiec.pl/dla_klientow/notowania/").read
 doc = Hpricot(page)
@@ -71,6 +73,8 @@ doc.search("//tr/td/a[@class='atl']").each do |a|
   end
 end
 
+puts "Stocks..."
+
 stooqs.each do |s|
   doc = Hpricot(open("http://stooq.com/q/?s="+s.downcase))
   doc.search("//span[@id='aq_"+s.downcase+"_c2|3']").each do |span|
@@ -96,6 +100,8 @@ doc.search("//tr[@id='noto']").each do |tr|
     end
   end
 end
+
+puts "Currencies..."
 
 doc = Hpricot(open("http://baksy.pl/kantor/kursy.php3"))
 doc.search("//p[@class='std-b2']").each do |p|
@@ -135,17 +141,20 @@ http.start {
   }
 }
 
-doc = Hpricot(open("http://tfi.investors.pl"))
-td = doc.at("//div[@id='assets_pricing']/table/tr[@class='first']/td[@class='r']")
-if td.inner_html =~ /\d{4}-\d{2}-\d{2}/
-  date = $&
-  trs = doc.search("//div[@id='assets_pricing']/table/tr[@class='name']")
-  for tr in trs
-    inv = tr.at("/td[@class='l']").inner_html
-    if investors.include?(inv)
-      if tr.at("/td[@class='r']").inner_html =~ /\d+\.\d+/
-        investors_hash[inv] = Item.new(inv, $&.gsub("." , ","), date)
-      end
+puts "Investors..."
+
+doc = Hpricot(open("http://tfi.investors.pl/wyceny/fundusz.html"))
+doc.search("//div[@id='main']/div[@id='content']/table[@id='fundfinder']/tr[@class='ffRow ']/td[@class='fndName']").each do |td|
+  inv = td.at("a").inner_html
+  if investors.include?(inv)
+    nexttd = td.next_sibling.next_sibling
+    if nexttd.inner_html =~ /(\d+,\d{2})&nbsp;zł/
+    	price = $1
+      #price = Float($1)
+	    if nexttd.at("small").inner_html =~ /\d{4}-\d{2}-\d{2}/
+  	  	date = $&
+  	  	investors_hash[inv] = Item.new(inv, price, date)
+  	 end
     end
   end
 end
