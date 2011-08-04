@@ -24,8 +24,8 @@ funds = [
 "Copernicus Dłużnych Papierów Korporacyjnych",
 "Alternatywny"];
 stooqs = [ "ARKAFRN12"]
-tickers = [ "BMP", "INK", "JSW", "VST", "ZAP"]
-currencies = [ "USD", "AUD", "EUR", "CHF" ]
+tickers = [ "BMP", "INK", "VST", "ZAP"]
+currencies = [ "USD", "AUD", "EUR" ]
 investors = ["Investor FIZ", "Investor Gold FIZ"]
 
 funds_hash = {}
