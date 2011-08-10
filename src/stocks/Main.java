@@ -32,7 +32,7 @@ public class Main {
 		for (Fund fund : Fund.values()) {
 			if (proceed(args, fund.getStooq())) {
 				System.out.println("Processing '" + fund + "'...");
-				DataCollector invfizInvestorsCollector = new InvestorsPlDataCollector(fund.getInvestorsPl());
+				DataCollector invfizInvestorsCollector = new InvestorsPlDataCollector(fund);
 				List<Data> invfizPl = invfizInvestorsCollector.collectData();
 				Date start = invfizPl.get(0).getDate();
 				Date today = new Date(System.currentTimeMillis());

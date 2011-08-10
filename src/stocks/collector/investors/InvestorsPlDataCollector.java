@@ -1,8 +1,10 @@
 package stocks.collector.investors;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -11,17 +13,11 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import javax.xml.transform.TransformerException;
-
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.xpath.XPathAPI;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 
 import stocks.collector.XmlDataCollector;
 import stocks.data.Data;
@@ -29,27 +25,20 @@ import stocks.data.Data;
 public class InvestorsPlDataCollector extends XmlDataCollector {
 
 	public enum Fund {
-		Invfiz("Investors FIZ", "invfiz", "investor-fiz"), InvGold(
-				"Investors Gold FIZ", "invgldfiz", "investor-gold-fiz"), InvCee(
-				"Investors CEE FIZ", "invceefiz", "investor-cee-fiz"), InvPe(
-				"Investors PE FIZ", "invpefiz", "investor-pe-fiz"), InvProperty(
-				"Investors Property FIZ", "invprfiz", "investor-property-fiz");
+		Invfiz("Investors FIZ", "invfiz"), InvGold("Investors Gold FIZ",
+				"invgldfiz"), InvCee("Investors CEE FIZ", "invceefiz"), InvPe(
+				"Investors PE FIZ", "invpefiz"), InvProperty(
+				"Investors Property FIZ", "invprfiz");
 		private String fullName;
 		private String stooq;
-		private String investorsPl;
 
-		Fund(String fullName, String stooq, String investorsPl) {
+		Fund(String fullName, String stooq) {
 			this.fullName = fullName;
 			this.stooq = stooq;
-			this.investorsPl = investorsPl;
 		}
 		
 		public String getStooq() {
 			return stooq;
-		}
-		
-		public String getInvestorsPl() {
-			return investorsPl;
 		}
 		
 		@Override
@@ -58,53 +47,70 @@ public class InvestorsPlDataCollector extends XmlDataCollector {
 		}
 	}
 	
-	private String asset;
+	private Fund fund;
 
-	public InvestorsPlDataCollector(String asset) {
-		this.asset = asset;
+	public InvestorsPlDataCollector(Fund asset) {
+		this.fund = asset;
 	}
 
 	@Override
 	public List<Data> collectData() {
 		List<Data> result = new ArrayList<Data>();
+		
 		try {
 			InputStream inputStream = getInput();
-			Document dom = parseXmlFile(inputStream);
-			NodeList nodes = XPathAPI.selectNodeList(dom, "//div[@class='resultsYear']/table/tr");
-			if (nodes == null || nodes.getLength() == 0)
-				// results still in one table
-				nodes = XPathAPI.selectNodeList(dom, "//div[@id='results']/table/tr[position()>1]");
-			if (nodes != null && nodes.getLength() > 0) {
-				for (int i = 0; i < nodes.getLength(); i++) {
-					Element element = (Element) nodes.item(i);
-					NodeList childNodes = element.getChildNodes();
-					// getTextContent() is not supported!
-					String date = childNodes.item(0).getFirstChild().getNodeValue();
-					String value = childNodes.item(1).getFirstChild().getNodeValue();
-					DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-					Date d = df.parse(date); 
-					Data data = new Data(d, Float.parseFloat(value), asset);
+			BufferedReader bufferedReader = new BufferedReader(
+					new InputStreamReader(inputStream));
+			String line = bufferedReader.readLine(); // skip first line
+			while ((line = bufferedReader.readLine()) != null
+					&& !line.equals("")) {
+				String[] split = line.split(";");
+				DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+				Date d = df.parse(split[0]);
+				String priceString = null;
+				
+				switch (fund) {
+				case Invfiz:
+					if (split.length > 1 && !split[1].isEmpty())
+						priceString = split[1];
+					break;
+				case InvGold:
+					if (split.length > 2 && !split[2].isEmpty())
+						priceString = split[2];
+					break;
+				case InvCee:
+					if (split.length > 3 && !split[3].isEmpty())
+						priceString = split[3];
+					break;
+				case InvPe:
+					if (split.length > 4 && !split[4].isEmpty())
+						priceString = split[4];
+					break;
+				case InvProperty:
+					if (split.length > 5 && !split[5].isEmpty())
+						priceString = split[5];
+					break;
+				}
+				if (priceString != null) {
+					float price = Float.parseFloat(priceString.replace(',', '.'));
+					Data data = new Data(d, price, fund.stooq);
 					result.add(data);
 				}
 			}
-		} catch (TransformerException e) {
-			// TODO Auto-generated catch block
+			inputStream.close();
+		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
 		Collections.sort(result);
 		return result;
 	}
 	
 	protected InputStream getInput() throws IOException {
 		HttpClient httpclient = new DefaultHttpClient();
-		HttpGet httpget = new HttpGet("http://tfi.investors.pl/" + asset
-				+ "/wyniki.html");
+		HttpGet httpget = new HttpGet("http://investors.pl/wyceny.csv,fiz,1");
 		ResponseHandler<String> responseHandler = new BasicResponseHandler();
 		String responseBody = httpclient.execute(httpget, responseHandler);
 		httpclient.getConnectionManager().shutdown();
