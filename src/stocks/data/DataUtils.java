@@ -65,7 +65,7 @@ public class DataUtils {
 		return result;
 	}
 
-	public static float[] computeDiscount(List<Data[]> matched) {
+	public static QuickStats computeDiscount(List<Data[]> matched) {
 		if (matched.isEmpty())
 			return null;
 		float lowest = 0;
@@ -86,7 +86,7 @@ public class DataUtils {
 		}
 		float median = getMedian(discounts);
 		float medianLowerThan1 = getMedian(discountsLowerThan1);
-		return new float[]{lowest, median, medianLowerThan1, last};
+		return new QuickStats(lowest, median, medianLowerThan1, last);
 	}
 
 	private static float getMedian(List<Float> floats) {

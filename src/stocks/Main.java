@@ -21,6 +21,7 @@ import stocks.collector.stooq.StooqHistoricalDataInterval;
 import stocks.collector.stooq.StooqPageHistoricalDataCollector;
 import stocks.data.Data;
 import stocks.data.DataUtils;
+import stocks.data.QuickStats;
 
 
 public class Main {
@@ -48,11 +49,8 @@ public class Main {
 
 				List<Data[]> matched = DataUtils.matchByDate(invfizPl, stooqHistData);
 
-				float[] result = DataUtils.computeDiscount(matched);
-				System.out.println("Lowest:   " + result[0]);
-				System.out.println("Median:   " + result[1]);
-				System.out.println("Median<1: " + result[2]);
-				System.out.println("Last:     " + result[3]);
+				QuickStats qa = DataUtils.computeDiscount(matched);
+				System.out.println(qa.toString());
 				String file = "output/" + fund.getStooq() + "_" + sdf.format(c1.getTime()) + ".csv";
 				toCsvFile(file, matched);
 			}
@@ -74,11 +72,8 @@ public class Main {
 			stooqHistData.add(stooqData.get(0));
 
 			List<Data[]> matched = DataUtils.matchByDate(stooqHistData, allegroCoins);
-			float[] result = DataUtils.computeDiscount(matched);
-			System.out.println("Lowest:   " + result[0]);
-			System.out.println("Median:   " + result[1]);
-			System.out.println("Median<1: " + result[2]);
-			System.out.println("Last:     " + result[3]);
+			QuickStats qa = DataUtils.computeDiscount(matched);
+			System.out.println(qa.toString());
 			String file = "output/" + "silver" + "_" + sdf.format(c1.getTime()) + ".csv";
 			toCsvFile(file, matched);
 		}
@@ -99,11 +94,8 @@ public class Main {
 			stooqHistData.add(stooqData.get(0));
 
 			List<Data[]> matched = DataUtils.matchByDate(arkafrn, stooqHistData);
-			float[] result = DataUtils.computeDiscount(matched);
-			System.out.println("Lowest:   " + result[0]);
-			System.out.println("Median:   " + result[1]);
-			System.out.println("Median<1: " + result[2]);
-			System.out.println("Last:     " + result[3]);
+			QuickStats qa = DataUtils.computeDiscount(matched);
+			System.out.println(qa.toString());
 			String file = "output/" + "arkafrn12" + "_" + sdf.format(c1.getTime()) + ".csv";
 			toCsvFile(file, matched);
 		}

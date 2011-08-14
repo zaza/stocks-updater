@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import stocks.data.Data;
 import stocks.data.DataUtils;
+import stocks.data.QuickStats;
 
 public class DataUtilsTests {
 
@@ -147,7 +148,7 @@ public class DataUtilsTests {
 	@Test
 	public void testComputeDiscountEmpty() {
 		List<Data[]> matched = new ArrayList<Data[]>();
-		float[] result = DataUtils.computeDiscount(matched);
+		QuickStats result = DataUtils.computeDiscount(matched);
 		assertNull(result);
 	}
 
@@ -155,22 +156,22 @@ public class DataUtilsTests {
 	public void testComputeDiscountNoMatch() {
 		List<Data[]> matched = new ArrayList<Data[]>();
 		matched.add(new Data[] {new Data(new Date(2000, 3, 1), 1f, "a"), null});
-		float[] result = DataUtils.computeDiscount(matched);
-		assertEquals(0, result[0], 0); // lowest
-		assertEquals(0, result[1], 0); // median
-		assertEquals(0, result[2], 0); // median for <1
-		assertEquals(0, result[3], 0); // last
+		QuickStats result = DataUtils.computeDiscount(matched);
+		assertEquals(0, result.getLowest(), 0);
+		assertEquals(0, result.getMedian(), 0);
+		assertEquals(0, result.getMedianLowerThan1(), 0);
+		assertEquals(0, result.getLast(), 0);
 	}
 	
 	@Test
 	public void testComputeDiscount1f() {
 		List<Data[]> matched = new ArrayList<Data[]>();
 		matched.add(new Data[] {new Data(new Date(2000, 3, 1), 1f, "a"), new Data(new Date(2000, 3, 1), 1f, "a")});
-		float[] result = DataUtils.computeDiscount(matched);
-		assertEquals(1f, result[0], 0); // lowest
-		assertEquals(1f, result[1], 0); // median
-		assertEquals(0f, result[2], 0); // median for <1
-		assertEquals(1f, result[3], 0); // last
+		QuickStats result = DataUtils.computeDiscount(matched);
+		assertEquals(1f, result.getLowest(), 0);
+		assertEquals(1f, result.getMedian(), 0);
+		assertEquals(0f, result.getMedianLowerThan1(), 0);
+		assertEquals(1f, result.getLast(), 0);
 	}
 	
 	@Test
@@ -178,11 +179,11 @@ public class DataUtilsTests {
 		List<Data[]> matched = new ArrayList<Data[]>();
 		matched.add(new Data[] {new Data(new Date(2000, 3, 1), 1f, "a"), new Data(new Date(2000, 3, 1), 1f, "a")});
 		matched.add(new Data[] {new Data(new Date(2000, 3, 2), 1f, "a"), null});
-		float[] result = DataUtils.computeDiscount(matched);
-		assertEquals(1f, result[0], 0); // lowest
-		assertEquals(1f, result[1], 0); // median
-		assertEquals(0f, result[2], 0); // median for <1
-		assertEquals(1f, result[3], 0); // last
+		QuickStats result = DataUtils.computeDiscount(matched);
+		assertEquals(1f, result.getLowest(), 0);
+		assertEquals(1f, result.getMedian(), 0);
+		assertEquals(0f, result.getMedianLowerThan1(), 0);
+		assertEquals(1f, result.getLast(), 0);
 	}
 	
 	@Test
@@ -190,11 +191,11 @@ public class DataUtilsTests {
 		List<Data[]> matched = new ArrayList<Data[]>();
 		matched.add(new Data[] {new Data(new Date(2000, 3, 1), 1f, "a"), new Data(new Date(2000, 3, 1), 1f, "a")});
 		matched.add(new Data[] {new Data(new Date(2000, 3, 2), 1f, "a"), new Data(new Date(2000, 3, 2), 0.9f, "a")});
-		float[] result = DataUtils.computeDiscount(matched);
-		assertEquals(0.9f, result[0], 0); // lowest
-		assertEquals(0.95f, result[1], 0); // median
-		assertEquals(0.9f, result[2], 0); // median for <1
-		assertEquals(0.9f, result[3], 0); // last
+		QuickStats result = DataUtils.computeDiscount(matched);
+		assertEquals(0.9f, result.getLowest(), 0);
+		assertEquals(0.95f, result.getMedian(), 0);
+		assertEquals(0.9f, result.getMedianLowerThan1(), 0);
+		assertEquals(0.9f, result.getLast(), 0);
 	}
 	
 	@Test
@@ -203,11 +204,10 @@ public class DataUtilsTests {
 		matched.add(new Data[] {new Data(new Date(2000, 3, 1), 1f, "a"), new Data(new Date(2000, 3, 1), 1f, "a")});
 		matched.add(new Data[] {new Data(new Date(2000, 3, 2), 1f, "a"), new Data(new Date(2000, 3, 2), 0.9f, "a")});
 		matched.add(new Data[] {new Data(new Date(2000, 3, 3), 1f, "a"), new Data(new Date(2000, 3, 3), 1.1f, "a")});
-		float[] result = DataUtils.computeDiscount(matched);
-		assertEquals(0.9f, result[0], 0); // lowest
-		assertEquals(1f, result[1], 0); // median
-		assertEquals(0.9f, result[2], 0); // median for <1
-		assertEquals(1.1f, result[3], 0); // last
+		QuickStats result = DataUtils.computeDiscount(matched);
+		assertEquals(0.9f, result.getLowest(), 0);
+		assertEquals(1f, result.getMedian(), 0);
+		assertEquals(0.9f, result.getMedianLowerThan1(), 0);
+		assertEquals(1.1f, result.getLast(), 0);
 	}
-
 }
