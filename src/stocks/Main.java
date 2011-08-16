@@ -22,6 +22,7 @@ import stocks.collector.stooq.StooqPageHistoricalDataCollector;
 import stocks.data.Data;
 import stocks.data.DataUtils;
 import stocks.data.QuickStats;
+import stocks.excel.Exporter;
 
 
 public class Main {
@@ -51,8 +52,9 @@ public class Main {
 
 				QuickStats qa = DataUtils.computeDiscount(matched);
 				System.out.println(qa.toString());
-				String file = "output/" + fund.getStooq() + "_" + sdf.format(c1.getTime()) + ".csv";
-				toCsvFile(file, matched);
+				String file = "output/" + fund.getStooq() + "_" + sdf.format(c1.getTime());
+				toCsvFile(file + ".csv", matched);
+				Exporter.toXlsFile(file + ".xls", matched);
 			}
 		}
 
@@ -74,8 +76,9 @@ public class Main {
 			List<Data[]> matched = DataUtils.matchByDate(stooqHistData, allegroCoins);
 			QuickStats qa = DataUtils.computeDiscount(matched);
 			System.out.println(qa.toString());
-			String file = "output/" + "silver" + "_" + sdf.format(c1.getTime()) + ".csv";
-			toCsvFile(file, matched);
+			String file = "output/" + "silver" + "_" + sdf.format(c1.getTime());
+			toCsvFile(file + ".csv", matched);
+			Exporter.toXlsFile(file + ".xls", matched);
 		}
 
 		// === arkafrn12
@@ -96,8 +99,9 @@ public class Main {
 			List<Data[]> matched = DataUtils.matchByDate(arkafrn, stooqHistData);
 			QuickStats qa = DataUtils.computeDiscount(matched);
 			System.out.println(qa.toString());
-			String file = "output/" + "arkafrn12" + "_" + sdf.format(c1.getTime()) + ".csv";
-			toCsvFile(file, matched);
+			String file = "output/" + "arkafrn12" + "_" + sdf.format(c1.getTime());
+			toCsvFile(file + ".csv", matched);
+			Exporter.toXlsFile(file + ".xls", matched);
 		}
 		System.out.println("Done.");
 	}
@@ -122,6 +126,5 @@ public class Main {
 			out.newLine();
 		}
 		out.close();
-		// TODO: import to excel
 	}
 }

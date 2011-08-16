@@ -33,9 +33,9 @@ public class QuickStats {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder("Quick stats:\n");
-		sb.append("Lowest:   " + lowest);
-		sb.append("Median:   " + median);
-		sb.append("Last:     " + last);
+		sb.append("Lowest:   " + lowest).append("\n");
+		sb.append("Median:   " + median).append("\n");
+		sb.append("Last:     " + last).append("\n");
 		return sb.toString();
 	}
 }
