@@ -15,7 +15,7 @@ module Updater
 
     # create a backup copy first
     date = now.strftime("%Y%m%d") 
-    File.copy("p:/docs/homebanking/portfel.xls", "p:/docs/homebanking/portfel" + date + ".bak")
+    File.copy("p:/docs/homebanking/portfel.xls", "p:/docs/homebanking/portfel" + date + ".xls")
 
     excel = WIN32OLE.new('Excel.Application')
     #excel.Visible = true
