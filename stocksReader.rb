@@ -23,7 +23,7 @@ funds = [
 "UniFundusze FIO Sub. UniKorona Pieniężny",
 "Copernicus Dłużnych Papierów Korporacyjnych",
 "Alternatywny"];
-stooqs = [ "ARKAFRN12"]
+stooqs = [ "ARKAFRN12", "INVFIZ"]
 tickers = [ "BMP", "INK", "VST", "ZAP"]
 currencies = [ "USD", "AUD", "EUR" ]
 investors = ["Investor FIZ", "Investor Gold FIZ"]
