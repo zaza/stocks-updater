@@ -19,7 +19,6 @@ funds = [
 "UniFundusze FIO Sub. UniAkcje MiŚS",
 "UniFundusze FIO Sub. UniAkcje Sektory Wzrostu",
 "UniFundusze FIO Sub. UniDolar Obligacje",
-"Amplico FIO Parasol Kraj. Sub. Pieniężny",
 "UniFundusze FIO Sub. UniKorona Pieniężny",
 "Copernicus Dłużnych Papierów Korporacyjnych",
 "Alternatywny"];
