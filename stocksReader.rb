@@ -22,9 +22,9 @@ funds = [
 "UniFundusze FIO Sub. UniKorona Pieniężny",
 "Copernicus Dłużnych Papierów Korporacyjnych",
 "Alternatywny"];
-stooqs = [ "ARKAFRN12", "INVFIZ"]
-tickers = [ "BMP", "INK", "VST", "ZAP"]
-currencies = [ "USD", "AUD", "EUR" ]
+stooqs = [ "ARKAFRN12", "INVFIZ", "RCSCRAOPEN"]
+tickers = [ "BMP", "INK", "VST", "ZAP", "JSW"]
+currencies = [ "USD", "AUD", "EUR", "CHF" ]
 investors = ["Investor FIZ", "Investor Gold FIZ"]
 
 funds_hash = {}
