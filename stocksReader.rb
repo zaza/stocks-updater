@@ -18,12 +18,12 @@ funds = [
 "PZU FIO Akcji MiŚ Spółek",
 "UniFundusze FIO Sub. UniAkcje MiŚS",
 "UniFundusze FIO Sub. UniAkcje Sektory Wzrostu",
-"UniFundusze FIO Sub. UniDolar Obligacje",
+#TODO:"UniFundusze FIO Sub. UniDolar Obligacje",
 "UniFundusze FIO Sub. UniKorona Pieniężny",
 "Copernicus Dłużnych Papierów Korporacyjnych",
 "Alternatywny"];
-stooqs = [ "ARKAFRN12", "INVFIZ", "RCSCRAOPEN"]
-tickers = [ "BMP", "INK", "VST", "ZAP", "JSW"]
+stooqs = [ "ARKAFRN12", "INVFIZ"]
+tickers = [ "BMP", "INK", "VST", "ZAP"]
 currencies = [ "USD", "AUD", "EUR", "CHF" ]
 investors = ["Investor FIZ", "Investor Gold FIZ"]
 
