@@ -25,7 +25,7 @@ funds = [
 stooqs = [ "ARKAFRN12", "INVFIZ"]
 tickers = [ "BMP", "INK", "VST", "ZAP"]
 currencies = [ "USD", "AUD", "EUR", "CHF" ]
-investors = ["Investor FIZ", "Investor Gold FIZ"]
+investors = ["Investor Gold FIZ"]
 
 funds_hash = {}
 stooqs_hash = {}
