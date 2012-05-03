@@ -21,9 +21,10 @@ funds = [
 #TODO:"UniFundusze FIO Sub. UniDolar Obligacje",
 "UniFundusze FIO Sub. UniKorona Pieniężny",
 "Copernicus Dłużnych Papierów Korporacyjnych",
-"Alternatywny"];
+"Alternatywny", 
+"PZU FIO PD Polonez"];
 stooqs = [ "ARKAFRN12", "INVFIZ"]
-tickers = [ "BMP", "INK", "VST", "ZAP"]
+tickers = [ "BMP", "BSK", "INK", "VST", "ZAP"]
 currencies = [ "USD", "AUD", "EUR", "CHF" ]
 investors = ["Investor Gold FIZ"]
 
