@@ -143,18 +143,22 @@ http.start {
 
 puts "Investors..."
 
-doc = Hpricot(open("http://tfi.investors.pl/wyceny/fundusz.html"))
+uri = URI("http://tfi.investors.pl/wyceny/fundusz.html")
+doc = Hpricot(open(uri))
 doc.search("//div[@id='main']/div[@id='content']/table[@id='fundfinder']/tr[@class='ffRow ']/td[@class='fndName']").each do |td|
-  inv = td.at("a").inner_html
+  inv_link = td.at("a")
+  inv = inv_link.inner_html
   if investors.include?(inv)
-    nexttd = td.next_sibling.next_sibling
-    if nexttd.inner_html =~ /(\d+,\d{2})&nbsp;zł/
-    	price = $1
-      #price = Float($1)
-	    if nexttd.at("small").inner_html =~ /\d{4}-\d{2}-\d{2}/
-  	  	date = $&
-  	  	investors_hash[inv] = Item.new(inv, price, date)
-  	 end
+    href = td.at("a")['href']
+    href = uri.scheme + "://" + uri.host + href
+    inv_doc = Hpricot(open(href))
+    div = inv_doc.at("//div[@class='fundNav']")
+    if div.inner_html =~ /(\d+,\d{2})&nbsp;zł/
+      price = $1
+      if div.at("small").inner_html =~ /\d{4}-\d{2}-\d{2}/
+        date = $&
+        investors_hash[inv] = Item.new(inv, price, date)
+      end
     end
   end
 end
