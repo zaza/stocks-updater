@@ -21,8 +21,9 @@ funds = [
 #TODO:"UniFundusze FIO Sub. UniDolar Obligacje",
 "UniFundusze FIO Sub. UniKorona Pieniężny",
 "Copernicus Dłużnych Papierów Korporacyjnych",
-"Alternatywny", 
-"PZU FIO PD Polonez"];
+"Alternatywny",
+"PZU FIO PD Polonez", 
+"ING SFIO Sub. Globalny Długu Korporacyjnego"];
 stooqs = [ "ARKAFRN12", "INVFIZ"]
 tickers = [ "BMP", "BSK", "INK", "VST", "ZAP"]
 currencies = [ "USD", "AUD", "EUR", "CHF" ]
@@ -51,6 +52,25 @@ doc.search("//tr/td[@class='title']/span[@class='leftSide']/a").each do |a|
         funds_hash[fund] = Item.new(fund, price, date)
         break
       end
+    end
+  end
+end
+
+# only "HSBC GIF GLOB EMERG MARKETS BOND E"
+
+fund = "HSBC GIF GLOB EMERG MARKETS BOND E"
+page = open("http://www.money.pl/fundusze/profile/fundusz,hsbc;gif;global;emerging;markets;bond;ec;pln,925,profil,tfi.html").read
+page = Iconv.iconv('utf-8','iso-8859-2',page).first
+doc = Hpricot(page)
+tr = doc.at("//table[@class='tabela']/tr")
+td = tr.search("/td")[0]
+if td.inner_html == "Aktualna wartość"
+  price = td.next_sibling.at("b").inner_html
+  td = tr.parent.search("/tr")[3].at("/td")
+  if td.inner_html == "Koniec okresu"
+    date = td.next_sibling.inner_html
+    if date =~ /[0-9]{4}-[0-9]{2}-[0-9]{2}/
+      funds_hash[fund] = Item.new(fund, price, date)
     end
   end
 end
