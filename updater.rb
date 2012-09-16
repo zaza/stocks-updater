@@ -63,7 +63,7 @@ module Updater
 
     v = ""
     found = false
-    100.downto(1) {|i|
+    150.downto(1) {|i|
       # column C
       v = ws.Cells(i, 3).Value
       # [<short name>] <long name> (sr) 
