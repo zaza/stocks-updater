@@ -34,6 +34,7 @@ stooqs_hash = {}
 tickers_hash = {}
 currencies_hash = {}
 investors_hash = {}
+coins_hash = {}
 
 puts "Funds..."
 
@@ -183,9 +184,26 @@ doc.search("//div[@id='main']/div[@id='content']/table[@id='fundfinder']/tr[@cla
   end
 end
 
+puts "Coins..."
+
 # monety:
 #1) max(http://baksy.pl/zlom.php3 , http://www.acclamatio.pl/index.php)
 #2) RCSILAOPEN = uncja srebra w pln
+#3) zlotyranking.pl
+
+page = open("http://zlotyranking.pl/ceny-srebra").read
+doc = Hpricot(page)
+span = doc.at("//span[@class='price']")
+if span.inner_html =~ /([0-9]+.[0-9]{2}) zł/
+  price = $1.gsub("." , ",")
+  script = doc.search("//script")[11]
+  if script.inner_html =~ /Aktualizacja<br> (\d{2})-(\d{2})-(\d{4})/
+    date = $3+"-"+$2+"-"+$1
+    it = Item.new("srebrne monety", price, date)
+    puts it
+    coins_hash["srebrne monety"] = it
+  end
+end
 
 funds.each { |i| puts funds_hash[i] }
 stooqs.each { |i| puts stooqs_hash[i] }
@@ -201,6 +219,7 @@ if gets.chomp == "y" then
   all_hash = all_hash.merge(tickers_hash)
   all_hash = all_hash.merge(currencies_hash)
   all_hash = all_hash.merge(investors_hash)
+  all_hash = all_hash.merge(coins_hash)
   Updater.update(all_hash)
 else
   print "Bye."
