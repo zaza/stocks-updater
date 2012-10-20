@@ -26,7 +26,7 @@ funds = [
 "ING SFIO Sub. Globalny Długu Korporacyjnego"];
 stooqs = [ "ARKAFRN12", "INVFIZ"]
 tickers = [ "BMP", "BSK", "INK", "VST", "ZAP"]
-currencies = [ "USD", "AUD", "EUR", "CHF" ]
+currencies = [ "USD", "AUD", "EUR", "CHF", "CAD" ]
 investors = ["Investor Gold FIZ"]
 
 funds_hash = {}
