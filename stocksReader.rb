@@ -5,29 +5,13 @@ require 'iconv'
 require 'net/https'
 require 'uri'
 
+require 'assets'
 require 'item'
 require 'updater'
 
 puts "Fetching data. Please wait..."
 
 now = DateTime::now()
-
-funds = [
-"Amplico SFIO Parasol Świat. Sub. Akcji Chińskich i Azj.",
-"Legg Mason Akcji FIO",
-"PZU FIO Akcji MiŚ Spółek",
-"UniFundusze FIO Sub. UniAkcje MiŚS",
-"UniFundusze FIO Sub. UniAkcje Sektory Wzrostu",
-#TODO:"UniFundusze FIO Sub. UniDolar Obligacje",
-"UniFundusze FIO Sub. UniKorona Pieniężny",
-"Copernicus Dłużnych Papierów Korporacyjnych",
-"Alternatywny",
-"PZU FIO PD Polonez", 
-"ING SFIO Sub. Globalny Długu Korporacyjnego"];
-stooqs = [ "ARKAFRN12", "INVFIZ"]
-tickers = [ "BMP", "BSK", "INK", "VST", "ZAP"]
-currencies = [ "USD", "AUD", "EUR", "CHF", "CAD" ]
-investors = ["Investor Gold FIZ"]
 
 funds_hash = {}
 stooqs_hash = {}
@@ -193,14 +177,13 @@ puts "Coins..."
 
 page = open("http://zlotyranking.pl/ceny-srebra").read
 doc = Hpricot(page)
-span = doc.at("//span[@class='price']")
+span = doc.at("//span[@id='cenazl']")
 if span.inner_html =~ /([0-9]+.[0-9]{2}) zł/
   price = $1.gsub("." , ",")
-  script = doc.search("//script")[11]
-  if script.inner_html =~ /Aktualizacja<br> (\d{2})-(\d{2})-(\d{4})/
+  script = doc.at("//span[@id='zmiana_data']")
+  if script.inner_html =~ /(\d{2})-(\d{2})-(\d{4})/
     date = $3+"-"+$2+"-"+$1
     it = Item.new("srebrne monety", price, date)
-    puts it
     coins_hash["srebrne monety"] = it
   end
 end
@@ -210,6 +193,7 @@ stooqs.each { |i| puts stooqs_hash[i] }
 tickers.each { |i| puts tickers_hash[i] }
 currencies.each { |i| puts currencies_hash[i] }
 investors.each { |i| puts investors_hash[i] }
+puts coins_hash["srebrne monety"]
 
 print "Update Excel workbook [yN]: "
 if gets.chomp == "y" then
