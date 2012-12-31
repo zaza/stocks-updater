@@ -1,0 +1,1 @@
+@d:\apps\Ruby186\bin\ruby.exe stocksReader.rb
