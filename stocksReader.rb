@@ -91,13 +91,13 @@ stooqs.each do |s|
 end
 
 doc = Hpricot(open("http://www.bankier.pl/inwestowanie/notowania/akcje.html"))
-doc.search("//tr[@id='noto']").each do |tr|
-  ticker = tr.search("/td")[1].inner_html
+doc.search("//tr[@id='noto']").each do |tr_noto|
+  ticker = tr_noto.search("/td")[1].inner_html
   if tickers.include?(ticker)
-    price = tr.search("/td")[2].inner_html
+    price = tr_noto.search("/td")[2].inner_html
     if price =~ /[0-9]+\.[0-9]{2}/
       price = $&.gsub("." , ",")
-      date = tr.search("/td")[10].inner_html
+      date = tr_noto.search("/td")[10].inner_html
       if date =~ /[0-9]{2}-[0-9]{2}/
         date = $&
         tickers_hash[ticker] = Item.new(ticker, price, now.year.to_s + "-" + date)
@@ -150,11 +150,11 @@ puts "Investors..."
 
 uri = URI("http://tfi.investors.pl/wyceny/fundusz.html")
 doc = Hpricot(open(uri))
-doc.search("//div[@id='main']/div[@id='content']/table[@id='fundfinder']/tr[@class='ffRow ']/td[@class='fndName']").each do |td|
-  inv_link = td.at("a")
+doc.search("//div[@id='main']/div[@id='content']/table[@id='fundfinder']/tr[@class='ffRow ']/td[@class='fndName']").each do |td_fndName|
+  inv_link = td_fndName.at("a")
   inv = inv_link.inner_html
   if investors.include?(inv)
-    href = td.at("a")['href']
+    href = td_fndName.at("a")['href']
     href = uri.scheme + "://" + uri.host + href
     inv_doc = Hpricot(open(href))
     div = inv_doc.at("//div[@class='fundNav']")
