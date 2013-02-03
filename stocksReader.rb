@@ -5,13 +5,27 @@ require 'iconv'
 require 'net/https'
 require 'uri'
 
-require 'assets'
 require 'item'
 require 'updater'
 
 puts "Fetching data. Please wait..."
 
 now = DateTime::now()
+
+def readlines(filename)
+  result = []
+  File.open(filename, "r").each_line do |line|
+     result << line.chomp
+  end
+  return result
+end
+
+#TODO:"UniFundusze FIO Sub. UniDolar Obligacje"
+funds = readlines("funds.txt")
+stooqs = readlines("stooqs.txt")
+tickers = []
+currencies = readlines("currencies.txt")
+investors = readlines("investors.txt")
 
 funds_hash = {}
 stooqs_hash = {}
@@ -41,25 +55,7 @@ doc.search("//tr/td[@class='title']/span[@class='leftSide']/a").each do |a|
   end
 end
 
-# only "HSBC GIF GLOB EMERG MARKETS BOND E"
-
-fund = "HSBC GIF GLOB EMERG MARKETS BOND E"
-page = open("http://www.money.pl/fundusze/profile/fundusz,hsbc;gif;global;emerging;markets;bond;ec;pln,925,profil,tfi.html").read
-page = Iconv.iconv('utf-8','iso-8859-2',page).first
-doc = Hpricot(page)
-tr = doc.at("//table[@class='tabela']/tr")
-td = tr.search("/td")[0]
-if td.inner_html == "Aktualna wartość"
-  price = td.next_sibling.at("b").inner_html
-  td = tr.parent.search("/tr")[3].at("/td")
-  if td.inner_html == "Koniec okresu"
-    date = td.next_sibling.inner_html
-    if date =~ /[0-9]{4}-[0-9]{2}-[0-9]{2}/
-      funds_hash[fund] = Item.new(fund, price, date)
-    end
-  end
-end
-
+if funds.any?
 page = open("http://www.bankier.pl/inwestowanie/notowania/fundusze/?aktywny=7").read
 page = Iconv.iconv('utf-8','iso-8859-2',page).first
 doc = Hpricot(page)
@@ -77,9 +73,11 @@ doc.search("//tr/td/a[@class='atl']").each do |a|
     end
   end
 end
+end
 
 puts "Stocks..."
 
+if stooqs.any?
 stooqs.each do |s|
   doc = Hpricot(open("http://stooq.com/q/?s="+s.downcase))
   doc.search("//span[@id='aq_"+s.downcase+"_c2|3']").each do |span|
@@ -89,7 +87,9 @@ stooqs.each do |s|
     end
   end
 end
+end
 
+if tickers.any?
 doc = Hpricot(open("http://www.bankier.pl/inwestowanie/notowania/akcje.html"))
 doc.search("//tr[@id='noto']").each do |tr_noto|
   ticker = tr_noto.search("/td")[1].inner_html
@@ -105,7 +105,9 @@ doc.search("//tr[@id='noto']").each do |tr_noto|
     end
   end
 end
+end
 
+if currencies.any?
 puts "Currencies..."
 
 doc = Hpricot(open("http://baksy.pl/kantor/kursy.php3"))
@@ -145,7 +147,9 @@ http.start {
   end
   }
 }
+end
 
+if investors.any?
 puts "Investors..."
 
 uri = URI("http://tfi.investors.pl/wyceny/fundusz.html")
@@ -167,6 +171,7 @@ doc.search("//div[@id='main']/div[@id='content']/table[@id='fundfinder']/tr[@cla
     end
   end
 end
+end
 
 puts "Coins..."
 
@@ -175,25 +180,26 @@ puts "Coins..."
 #2) RCSILAOPEN = uncja srebra w pln
 #3) zlotyranking.pl
 
-page = open("http://zlotyranking.pl/ceny-srebra").read
-doc = Hpricot(page)
-span = doc.at("//span[@id='cenazl']")
-if span.inner_html =~ /([0-9]+.[0-9]{2}) zł/
-  price = $1.gsub("." , ",")
-  script = doc.at("//span[@id='zmiana_data']")
-  if script.inner_html =~ /(\d{2})-(\d{2})-(\d{4})/
-    date = $3+"-"+$2+"-"+$1
-    it = Item.new("srebrne monety", price, date)
-    coins_hash["srebrne monety"] = it
-  end
-end
+# TODO
+#page = open("http://zlotyranking.pl/ceny-srebra").read
+#doc = Hpricot(page)
+#span = doc.at("//span[@id='cenazl']")
+#if span.inner_html =~ /([0-9]+.[0-9]{2}) zł/
+#  price = $1.gsub("." , ",")
+#  script = doc.at("//span[@id='zmiana_data']")
+#  if script.inner_html =~ /(\d{2})-(\d{2})-(\d{4})/
+#    date = $3+"-"+$2+"-"+$1
+#    it = Item.new("srebrne monety", price, date)
+#    coins_hash["srebrne monety"] = it
+#  end
+#end
 
 funds.each { |i| puts funds_hash[i] }
 stooqs.each { |i| puts stooqs_hash[i] }
 tickers.each { |i| puts tickers_hash[i] }
 currencies.each { |i| puts currencies_hash[i] }
 investors.each { |i| puts investors_hash[i] }
-puts coins_hash["srebrne monety"]
+#puts coins_hash["srebrne monety"]
 
 print "Update Excel workbook [yN]: "
 if gets.chomp == "y" then
