@@ -36,25 +36,6 @@ coins_hash = {}
 
 puts "Funds..."
 
-# only "(Skarbiec) Alternatywny"
-page = open("http://www.skarbiec.pl/dla_klientow/notowania/").read
-doc = Hpricot(page)
-doc.search("//tr/td[@class='title']/span[@class='leftSide']/a").each do |a|
-  fund = a.inner_html
-  if fund == "Alternatywny"
-    div = a.parent.parent.parent.at("td[@class='value']/div")
-    if div.inner_html =~ /([0-9]+,[0-9]{2}) PLN/
-      price = $1
-      date = div.at("div[@class='data']").inner_html
-      if date =~ /[0-9]{4}-[0-9]{2}-[0-9]{2}/
-        date = $&
-        funds_hash[fund] = Item.new(fund, price, date)
-        break
-      end
-    end
-  end
-end
-
 if funds.any?
 page = open("http://www.bankier.pl/inwestowanie/notowania/fundusze/?aktywny=7").read
 page = Iconv.iconv('utf-8','iso-8859-2',page).first
