@@ -109,26 +109,26 @@ doc.search("//p[@class='std-b2']").each do |p|
 end
 
 #TODO: run walutomat.pl first and skip found currencies on baksy.pl
-uri = URI.parse('https://www.walutomat.pl/')
-http = Net::HTTP.new(uri.host, uri.port)
-http.use_ssl = true if uri.scheme == "https"  # enable SSL/TLS
-http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-http.start {
-  http.request_get(uri.path) {|res|
-    doc = Hpricot(res.body)
-    doc.search("//div[@id='obecny-kurs']/table/tr/td[@name='pair']/a").each do |a|
-    if a.inner_html =~ /([A-Z]{3})\ \/\ PLN/
-      if currencies.include?($1)
-        rate = a.parent.next_sibling.inner_html
-        price = Float(rate)
-        currencies_hash[$1] = Item.new($1, price.to_s.gsub("." , ","), now.strftime("%Y-%m-%d"))
-        #currencies.delete($1) #FIXME: don't look for it on baksy.pl
-      end
-    end
-  end
-  }
-}
-end
+#uri = URI.parse('https://www.walutomat.pl/')
+#http = Net::HTTP.new(uri.host, uri.port)
+#http.use_ssl = true if uri.scheme == "https"  # enable SSL/TLS
+#http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+#http.start {
+#  http.request_get(uri.path) {|res|
+#    doc = Hpricot(res.body)
+#    doc.search("//div[@id='obecny-kurs']/table/tr/td[@name='pair']/a").each do |a|
+#    if a.inner_html =~ /([A-Z]{3})\ \/\ PLN/
+#      if currencies.include?($1)
+#        rate = a.parent.next_sibling.inner_html
+#        price = Float(rate)
+#        currencies_hash[$1] = Item.new($1, price.to_s.gsub("." , ","), now.strftime("%Y-%m-%d"))
+#        #currencies.delete($1) #FIXME: don't look for it on baksy.pl
+#      end
+#    end
+#  end
+#  }
+#}
+#end
 
 if investors.any?
 puts "Investors..."
@@ -156,31 +156,29 @@ end
 
 puts "Coins..."
 
-# monety:
-#1) max(http://baksy.pl/zlom.php3 , http://www.acclamatio.pl/index.php)
-#2) RCSILAOPEN = uncja srebra w pln
-#3) zlotyranking.pl
-
-# TODO
-#page = open("http://zlotyranking.pl/ceny-srebra").read
-#doc = Hpricot(page)
+page = open("http://zlotyranking.pl/zloto_live.txt").read
 #span = doc.at("//span[@id='cenazl']")
-#if span.inner_html =~ /([0-9]+.[0-9]{2}) zł/
-#  price = $1.gsub("." , ",")
-#  script = doc.at("//span[@id='zmiana_data']")
-#  if script.inner_html =~ /(\d{2})-(\d{2})-(\d{4})/
-#    date = $3+"-"+$2+"-"+$1
-#    it = Item.new("srebrne monety", price, date)
-#    coins_hash["srebrne monety"] = it
-#  end
-#end
+if page =~ /"ts":(\d+)\}/
+  ts = $1
+  time = Time.at(ts.to_i)
+  page = open("http://zlotyranking.pl/ceny-srebra").read
+  doc = Hpricot(page)
+  div = doc.at("/html/body/div/div/div[2]/div/section/section/div[2]/div/div[@class='price']")
+  if div.inner_html =~ /([0-9]+.[0-9]{2}) zł/
+    price = $1.gsub("." , ",")
+    date = time.strftime "%Y-%m-%d"
+    it = Item.new("srebrne monety", price, date)
+    coins_hash["srebrne monety"] = it
+  end
+end
+end
 
 funds.each { |i| puts funds_hash[i] }
 stooqs.each { |i| puts stooqs_hash[i] }
 tickers.each { |i| puts tickers_hash[i] }
 currencies.each { |i| puts currencies_hash[i] }
 investors.each { |i| puts investors_hash[i] }
-#puts coins_hash["srebrne monety"]
+puts coins_hash["srebrne monety"]
 
 print "Update Excel workbook [yN]: "
 if gets.chomp == "y" then
