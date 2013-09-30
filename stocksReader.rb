@@ -25,13 +25,11 @@ funds = readlines("funds.txt")
 stooqs = readlines("stooqs.txt")
 tickers = []
 currencies = readlines("currencies.txt")
-investors = readlines("investors.txt")
 
 funds_hash = {}
 stooqs_hash = {}
 tickers_hash = {}
 currencies_hash = {}
-investors_hash = {}
 coins_hash = {}
 
 puts "Funds..."
@@ -130,30 +128,6 @@ end
 #}
 #end
 
-if investors.any?
-puts "Investors..."
-
-uri = URI("http://tfi.investors.pl/wyceny/fundusz.html")
-doc = Hpricot(open(uri))
-doc.search("//div[@id='main']/div[@id='content']/table[@id='fundfinder']/tr[@class='ffRow ']/td[@class='fndName']").each do |td_fndName|
-  inv_link = td_fndName.at("a")
-  inv = inv_link.inner_html
-  if investors.include?(inv)
-    href = td_fndName.at("a")['href']
-    href = uri.scheme + "://" + uri.host + href
-    inv_doc = Hpricot(open(href))
-    div = inv_doc.at("//div[@class='fundNav']")
-    if div.inner_html =~ /(\d+,\d{2})&nbsp;zł/
-      price = $1
-      if div.at("small").inner_html =~ /\d{4}-\d{2}-\d{2}/
-        date = $&
-        investors_hash[inv] = Item.new(inv, price, date)
-      end
-    end
-  end
-end
-end
-
 puts "Coins..."
 
 page = open("http://zlotyranking.pl/zloto_live.txt").read
@@ -177,7 +151,6 @@ funds.each { |i| puts funds_hash[i] }
 stooqs.each { |i| puts stooqs_hash[i] }
 tickers.each { |i| puts tickers_hash[i] }
 currencies.each { |i| puts currencies_hash[i] }
-investors.each { |i| puts investors_hash[i] }
 puts coins_hash["srebrne monety"]
 
 print "Update Excel workbook [yN]: "
@@ -187,7 +160,6 @@ if gets.chomp == "y" then
   all_hash = all_hash.merge(stooqs_hash)
   all_hash = all_hash.merge(tickers_hash)
   all_hash = all_hash.merge(currencies_hash)
-  all_hash = all_hash.merge(investors_hash)
   all_hash = all_hash.merge(coins_hash)
   Updater.update(all_hash)
 else
