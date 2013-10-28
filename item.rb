@@ -4,13 +4,16 @@ class Item
     @price = p
     @date = d
   end
-  def price  
-    @price  
+  def price
+    @price
   end  
-  def date  
-    @date  
-  end  
+  def date
+    @date
+  end
+  def value
+    price
+  end
   def to_s
     "#{@name}\t#{@price}\t#{@date}"
-  end 
+  end
 end

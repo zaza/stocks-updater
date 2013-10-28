@@ -104,7 +104,7 @@ module Updater
   
   def Updater.update_cell(type, ws, row, item)
     oldPrice = ws.Range("F" + row).Value
-    ws.Range("F" + row).Value = item.price
+    ws.Range("F" + row).Value = item.value
     ws.Range("G" + row).Value = item.date
     change = (item.price.gsub(',', '.').to_f / oldPrice.to_f-1) * 100
     printf("(%s) found at %s, change %.2f%\n", type, row, change)

@@ -6,6 +6,7 @@ require 'net/https'
 require 'uri'
 
 require 'item'
+require 'discount95'
 require 'updater'
 
 puts "Fetching data. Please wait..."
@@ -147,11 +148,32 @@ if page =~ /"ts":(\d+)\}/
 end
 end
 
+
+uri = URI.parse('https://www.monety-inwestycyjne.pl/monety-zlote-1-oz-krugerrand-1oz-p-137.html')
+http = Net::HTTP.new(uri.host, uri.port)
+http.use_ssl = true if uri.scheme == "https"  # enable SSL/TLS
+http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+http.start {
+  http.request_get(uri.path) {|res|
+    doc = Hpricot(res.body)
+    form = doc.search("//form")[0]
+    td = form.at("/table/tr/td/table/tr/td[2]")
+    if td.inner_html =~ /(\d\.\d{3},\d{2})zl/
+      price = $1.gsub("." , "")
+      date = Date.today.to_s
+      it = Item.new("Krugerrand", price, date)
+      it.extend(Discount95)
+      coins_hash["Krugerrand"] = it
+    end
+  }
+}
+
 funds.each { |i| puts funds_hash[i] }
 stooqs.each { |i| puts stooqs_hash[i] }
 tickers.each { |i| puts tickers_hash[i] }
 currencies.each { |i| puts currencies_hash[i] }
 puts coins_hash["srebrne monety"]
+puts coins_hash["Krugerrand"]
 
 print "Update Excel workbook [yN]: "
 if gets.chomp == "y" then
