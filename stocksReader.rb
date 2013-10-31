@@ -20,7 +20,6 @@ def readlines(filename)
   return result
 end
 
-#TODO:"UniFundusze FIO Sub. UniDolar Obligacje"
 funds = readlines("funds.txt")
 stooqs = readlines("stooqs.txt")
 tickers = []
@@ -116,10 +115,10 @@ puts "Stocks..."
 if stooqs.any?
 stooqs.each do |s|
   doc = Hpricot(open("http://stooq.com/q/?s="+s.downcase))
-  doc.search("//span[@id='aq_"+s.downcase+"_c2|3']").each do |span|
-    price = span.inner_html.gsub("." , ",")
-    doc.search("//span[@id='aq_"+s.downcase+"_d2']").each do |span|
-      stooqs_hash[s] = Item.new(s, price, span.inner_html)
+  doc.search("//span[@id='aq_"+s.downcase+"_c2|3']").each do |spanPrice|
+    price = spanPrice.inner_html.gsub("." , ",")
+    doc.search("//span[@id='aq_"+s.downcase+"_d2']").each do |spanDate|
+      stooqs_hash[s] = Item.new(s, price, spanDate.inner_html)
     end
   end
 end
