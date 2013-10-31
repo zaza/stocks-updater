@@ -17,3 +17,13 @@ class Item
     "#{@name}\t#{@price}\t#{@date}"
   end
 end
+
+class ItemWithModifier < Item
+  def initialize(n, p, d, m)
+    super(n, p, d)
+    @modifier = m
+  end
+  def value
+    "=" + @price.to_s + "*" + @modifier.to_s
+  end
+end
