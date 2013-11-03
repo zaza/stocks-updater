@@ -104,8 +104,6 @@ if span.inner_html =~ /(\d+\.\d{2})/
   if span.inner_html =~ /[0-9]{4}-[0-9]{2}-[0-9]{2}/
      date = $&
      it = ItemWithModifier.new("UniDolar Obligacje USD", price, date, currencies_hash["USD"].price)
-     puts it
-     puts it.value
      funds_hash["UniDolar Obligacje USD"] = it
   end
 end
