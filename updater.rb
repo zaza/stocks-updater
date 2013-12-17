@@ -103,11 +103,34 @@ module Updater
   end
   
   def Updater.update_cell(type, ws, row, item)
-    oldPrice = ws.Range("F" + row).Value
+    oldValue = ws.Range("F" + row).Value
     ws.Range("F" + row).Value = item.value
     ws.Range("G" + row).Value = item.date
-    change = (item.price.gsub(',', '.').to_f / oldPrice.to_f-1) * 100
+    newValue = new_value(item.value)
+    change = (newValue / oldValue.to_f-1) * 100
     printf("(%s) found at %s, change %.2f%\n", type, row, change)
     $\ = nil
   end
-end
+
+ def Updater.new_value(value)
+    # TODO: replace with start_with?('=') available in 1.9
+    if value =~ /\A=/
+      value = value[1, value.length]
+    end
+
+    # replace % with float
+    i, op, j = value.scan(/([\d,]+)([+\-*\/])?([\d+,]+\%?)?/)[0] #=> ["4037.83", "*", "95%"]
+    if  j =~ /\%$/
+      j = "0." + j[0..-2]
+      result = i.to_f.send op, j.to_f
+    elsif !op.nil?
+      i = i.gsub(",", ".")
+      j = j.gsub(",", ".")
+      result = i.to_f.send op, j.to_f
+    else
+      result = i = i.gsub(",", ".")
+    end
+    return result.to_f
+  end
+
+end #module
