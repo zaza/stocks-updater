@@ -15,14 +15,14 @@ module Updater
 
     # create a backup copy first
     date = now.strftime("%Y%m%d") 
-    File.copy("p:/docs/homebanking/portfel.xls", "p:/docs/homebanking/portfel" + date + ".xls")
+    File.copy(ARGV[0]+"portfel.xls", ARGV[0]+"portfel" + date + ".xls")
 
     excel = WIN32OLE.new('Excel.Application')
     #excel.Visible = true
     #excel.Interactive = false
     #excel.ScreenUpdating = false
 
-    workbook = excel.Workbooks.Open("p:/docs/homebanking/portfel.xls")
+    workbook = excel.Workbooks.Open(ARGV[0]+"portfel.xls")
 
     WIN32OLE.codepage = WIN32OLE::CP_UTF8
 

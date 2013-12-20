@@ -1,1 +1,1 @@
-@d:\apps\Ruby186\bin\ruby.exe stocksReader.rb
+@d:\apps\Ruby186\bin\ruby.exe stocksReader.rb p:/docs/homebanking/
