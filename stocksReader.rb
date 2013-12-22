@@ -187,7 +187,7 @@ puts coins_hash["srebrne monety"]
 puts coins_hash["Krugerrand"]
 
 print "Update Excel workbook [yN]: "
-if gets.chomp == "y" then
+if STDIN.gets.chomp == "y" then
   all_hash = {}
   all_hash = all_hash.merge(funds_hash)
   all_hash = all_hash.merge(stooqs_hash)
