@@ -77,29 +77,26 @@ end
 puts "Funds..."
 
 if funds.any?
-page = open("http://www.bankier.pl/inwestowanie/notowania/fundusze/?aktywny=7").read
-page = Iconv.iconv('utf-8','iso-8859-2',page).first
+page = open("http://www.bankier.pl/fundusze/notowania/wszystkie").read
+#page = Iconv.iconv('utf-8','iso-8859-2',page).first
 doc = Hpricot(page)
-doc.search("//tr/td/a[@class='atl']").each do |a|
+doc.search("//tr/td[@class='colTicker']/a").each do |a|
   fund = a.inner_html
   if funds.include?(fund)
-    price = a.parent.parent.search("/td")[2].inner_html
-    if price =~ /[0-9]+(\.[0-9]{2})*/
-      price = $&.gsub("." , ",")
-      date = a.parent.parent.search("/td")[9].inner_html
-      if date =~ /[0-9]{2}-[0-9]{2}/
-        date = $&
-        funds_hash[fund] = Item.new(fund, price, now.year.to_s + "-" + date)
-      end
+    price = a.parent.parent.search("/td[@class='colKurs']").first.inner_html
+    date = a.parent.parent.search("/td[@class='colAktualizacja textNowrap']").inner_html
+    if date =~ /[0-9]{4}-[0-9]{2}-[0-9]{2}/
+      date = $&
+      funds_hash[fund] = Item.new(fund, price, date)
     end
   end
 end
 end
-
-page = open("http://www.bankier.pl/inwestowanie/fundusze/narzedzia/profile/?uni_key=816").read
+=begin
+page = open("http://www.bankier.pl/fundusze/notowania/UNI30_U").read
 doc = Hpricot(page)
 span = doc.at("/html/body/div[2]/div[3]/table/tr/td[2]/table[3]/tr[2]/td[2]/div/span")
-if span.inner_html =~ /(\d+\.\d{2})/
+if span.inner_html =~ /(\d+\,\d{2})/
   price = $1.gsub("." , ",")
   span = doc.at("/html/body/div[2]/div[3]/table/tr/td[2]/table[3]/tr[2]/td[2]/span")
   if span.inner_html =~ /[0-9]{4}-[0-9]{2}-[0-9]{2}/
@@ -108,6 +105,8 @@ if span.inner_html =~ /(\d+\.\d{2})/
      funds_hash["UniDolar Obligacje USD"] = it
   end
 end
+=end
+
 puts "Stocks..."
 
 if stooqs.any?
