@@ -23,18 +23,17 @@ end
 
 funds = readlines("funds.txt")
 stooqs = readlines("stooqs.txt")
-tickers = []
 currencies = readlines("currencies.txt")
 
 funds_hash = {}
 stooqs_hash = {}
-tickers_hash = {}
 currencies_hash = {}
 coins_hash = {}
 
 if currencies.any?
 puts "Currencies..."
 
+begin
 doc = Hpricot(open("http://baksy.pl/kantor/kursy.php3"))
 doc.search("//p[@class='std-b2']").each do |p|
   if p.inner_html =~ /\d{4}-\d{2}-\d{2}/
@@ -42,8 +41,9 @@ doc.search("//p[@class='std-b2']").each do |p|
     doc.search("//tr/td[@class='lista']/nobr").each do |nobr|
       if nobr.inner_html =~ /([0-9 ]+)([A-Z]{3})/
         if currencies.include?($2)
-          buy = nobr.parent.next_sibling.inner_html
+          buy = nobr.parent.next_sibling.inner_text
           price = Float(buy)
+          #<b>300.50</b>
           currencies_hash[$2] = Item.new($2, (price/100).to_s.gsub("." , ","), date)
         end
       end
@@ -51,7 +51,7 @@ doc.search("//p[@class='std-b2']").each do |p|
     break
   end
 end
-
+end
 #TODO: run walutomat.pl first and skip found currencies on baksy.pl
 #uri = URI.parse('https://www.walutomat.pl/')
 #http = Net::HTTP.new(uri.host, uri.port)
@@ -108,7 +108,6 @@ if span.inner_html =~ /(\d+\.\d{2})/
      funds_hash["UniDolar Obligacje USD"] = it
   end
 end
-
 puts "Stocks..."
 
 if stooqs.any?
@@ -118,24 +117,6 @@ stooqs.each do |s|
     price = spanPrice.inner_html.gsub("." , ",")
     doc.search("//span[@id='aq_"+s.downcase+"_d2']").each do |spanDate|
       stooqs_hash[s] = Item.new(s, price, spanDate.inner_html)
-    end
-  end
-end
-end
-
-if tickers.any?
-doc = Hpricot(open("http://www.bankier.pl/inwestowanie/notowania/akcje.html"))
-doc.search("//tr[@id='noto']").each do |tr_noto|
-  ticker = tr_noto.search("/td")[1].inner_html
-  if tickers.include?(ticker)
-    price = tr_noto.search("/td")[2].inner_html
-    if price =~ /[0-9]+\.[0-9]{2}/
-      price = $&.gsub("." , ",")
-      date = tr_noto.search("/td")[10].inner_html
-      if date =~ /[0-9]{2}-[0-9]{2}/
-        date = $&
-        tickers_hash[ticker] = Item.new(ticker, price, now.year.to_s + "-" + date)
-      end
     end
   end
 end
@@ -181,7 +162,6 @@ http.start {
 
 funds_hash.each do |k, v| puts v end
 stooqs.each { |i| puts stooqs_hash[i] }
-tickers.each { |i| puts tickers_hash[i] }
 currencies.each { |i| puts currencies_hash[i] }
 puts coins_hash["srebrne monety"]
 puts coins_hash["Krugerrand"]
@@ -191,7 +171,6 @@ if STDIN.gets.chomp == "y" then
   all_hash = {}
   all_hash = all_hash.merge(funds_hash)
   all_hash = all_hash.merge(stooqs_hash)
-  all_hash = all_hash.merge(tickers_hash)
   all_hash = all_hash.merge(currencies_hash)
   all_hash = all_hash.merge(coins_hash)
   Updater.update(all_hash)
