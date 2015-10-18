@@ -92,22 +92,6 @@ doc.search("//tr/td[@class='colTicker']/a").each do |a|
 end
 end
 
-#page = open("http://www.bankier.pl/fundusze/notowania/UNI30_U").read
-page = open("http://www.bankier.pl/fundusze/notowania/wszystkie").read
-doc = Hpricot(page)
-doc.search("//tr/td[@class='colTicker']/a").each do |a|
-  fund = a.inner_html
-  if fund == "UniDolar Pieniężny (USD) (UniFundusze FIO)"
-    price = a.parent.parent.search("/td[@class='colKurs']").first.inner_html
-    date = a.parent.parent.search("/td[@class='colAktualizacja textNowrap']").inner_html
-    if date =~ /[0-9]{4}-[0-9]{2}-[0-9]{2}/
-      date = $&
-      it = ItemWithModifier.new("UniDolar Obligacje USD", price, date, currencies_hash["USD"].price)
-      funds_hash["UniDolar Obligacje USD"] = it
-    end
-  end
-end
-
 puts "Stocks..."
 
 if stooqs.any?
@@ -132,7 +116,7 @@ if page =~ /"ts":(\d+)\}/
   page = open("http://zlotyranking.pl/ceny-srebra").read
   doc = Hpricot(page)
   div = doc.at("/html/body/div/div/div[2]/div/section/section/div[2]/div/div[@class='price']")
-  if div.inner_html =~ /([0-9]+.[0-9]{2}) zł/
+  if div.inner_html =~ /([0-9]+\.[0-9]{2}) zł/
     price = $1.gsub("." , ",")
     date = time.strftime "%Y-%m-%d"
     it = Item.new("srebrne monety", price, date)
@@ -141,18 +125,16 @@ if page =~ /"ts":(\d+)\}/
 end
 end
 
-
-uri = URI.parse('https://www.monety-inwestycyjne.pl/monety-zlote-1-oz-krugerrand-1oz-p-137.html')
+uri = URI.parse('https://79element.pl/zlote-monety-1oz/43-south-african-gold-krugerrand-1-oz.html')
 http = Net::HTTP.new(uri.host, uri.port)
 http.use_ssl = true if uri.scheme == "https"  # enable SSL/TLS
 http.verify_mode = OpenSSL::SSL::VERIFY_NONE
 http.start {
   http.request_get(uri.path) {|res|
     doc = Hpricot(res.body)
-    form = doc.search("//form")[0]
-    td = form.at("/table/tr/td/table/tr/td[2]")
-    if td.inner_html =~ /(\d\.\d{3},\d{2})zl/
-      price = $1.gsub("." , "")
+    span = doc.search("//span[@id='our_price_display']").first
+    if span.inner_html =~ /(\d \d{3},\d{2}) zł/
+      price = $1.gsub(" " , "")
       date = Date.today.to_s
       it = ItemWithModifier.new("Krugerrand", price, date, "95%")
       coins_hash["Krugerrand"] = it
