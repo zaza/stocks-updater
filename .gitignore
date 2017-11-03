@@ -2,3 +2,6 @@ currencies.txt
 funds.txt
 investors.txt
 stooqs.txt
+*.tmp
+/bin/
+/target/

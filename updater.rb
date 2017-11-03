@@ -1,3 +1,5 @@
+require 'date'
+require 'fileutils'
 require 'win32ole'
 require 'ftools'
 
@@ -15,19 +17,19 @@ module Updater
 
     # create a backup copy first
     date = now.strftime("%Y%m%d") 
-    File.copy(ARGV[0]+"portfel.xls", ARGV[0]+"portfel" + date + ".xls")
+    FileUtils.cp(ARGV[0]+"portfel.xls", ARGV[0]+"portfel" + date + ".xls")
 
-    excel = WIN32OLE.new('Excel.Application')
-    #excel.Visible = true
-    #excel.Interactive = false
-    #excel.ScreenUpdating = false
+    xl = WIN32OLE.new('Excel.Application')
+    #xl.Visible = true
+    #xl.Interactive = false
+    #xl.ScreenUpdating = false
 
-    workbook = excel.Workbooks.Open(ARGV[0]+"portfel.xls")
+    wb = xl.Workbooks.Open(ARGV[0]+"portfel.xls")
 
     WIN32OLE.codepage = WIN32OLE::CP_UTF8
 
     # update "historia" worksheet
-    ws = workbook.Worksheets('historia')
+    ws = wb.Worksheets('historia')
 
     cell_data = ws.Cells(2,1)
     cell_razem = ws.Cells(2,2)
@@ -42,17 +44,23 @@ module Updater
     ws.Cells(2,3).Formula = "=(B2-B3)/B2"
 
     # update "PORTFEL" worksheet
-    ws = workbook.Worksheets('PORTFEL')
+    ws = wb.Worksheets('PORTFEL')
 
     all_hash.each {|key, value| 
       find_and_update(ws, key, value)
     }
 
-    #excel.ScreenUpdating = true
+    #xl.ScreenUpdating = true
     
-    workbook.Save
-    workbook.Close
-    excel.Quit
+    wb.Save
+    wb.Close
+    xl.Quit
+    # win32ole: application.quit() leave process running
+	# https://www.ruby-forum.com/topic/114496
+	ws = nil
+	wb = nil
+	xl = nil
+	GC.start
 
     puts "Done."
   end
