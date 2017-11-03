@@ -6,10 +6,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -19,11 +17,9 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class BaksyScrapper {
+public class BaksyScrapper extends Scrapper {
 
 	private static final URI BAKSY_URI = URI.create("http://www.baksy.pl/kurs-walut");
-
-	private static final int FIVE_SECONDS = (int) TimeUnit.SECONDS.toMillis(5);
 
 	private Collection<String> ids;
 
@@ -56,10 +52,6 @@ public class BaksyScrapper {
 		return new SimpleDateFormat("yyyy.MM.dd HH:mm").parse(dateTime);
 	}
 
-	private String formatDate(Date date) {
-		return new SimpleDateFormat("yyyy-MM-dd").format(date);
-	}
-
 	private List<Map<String, Map<String, String>>> collectItems(Document document) {
 		Elements rows = document.select("main#container > div.container > table.rate-table > tbody > tr");
 		return rows.stream().filter(byIds()).map(asMap()).collect(Collectors.toList());
@@ -80,13 +72,7 @@ public class BaksyScrapper {
 
 			@Override
 			public Map<String, Map<String, String>> apply(Element row) {
-				Map<String, Map<String, String>> result = new HashMap<>();
-				Map<String, String> item = new HashMap<>();
-				item.put("name", getWaluta(row));
-				item.put("price", getKupno(row));
-				item.put("date", date);
-				result.put(getWaluta(row), item);
-				return result;
+				return asMap(getWaluta(row), row.child(3).text(), date);
 			}
 		};
 	}
@@ -95,7 +81,4 @@ public class BaksyScrapper {
 		return row.child(0).text();
 	}
 
-	private String getKupno(Element row) {
-		return row.child(3).text();
-	}
 }

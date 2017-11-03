@@ -7,10 +7,8 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -18,12 +16,10 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
-public class StooqScrapper {
+public class StooqScrapper extends Scrapper{
 
 	private static final String STOOQ = "https://stooq.pl/q/?s=%s";
 
-	private static final int FIVE_SECONDS = (int) TimeUnit.SECONDS.toMillis(5);
-	
 	private Collection<String> ids;
 
 	public StooqScrapper(Collection<String> ids) {
@@ -44,13 +40,7 @@ public class StooqScrapper {
 					Element price = document.getElementById(format("aq_%s_c2|3", id.toLowerCase()));
 					Element date = document.getElementById(format("aq_%s_d2", id.toLowerCase()));
 					
-					Map<String, Map<String, String>> result = new HashMap<>();
-					Map<String, String> item = new HashMap<>();
-					item.put("name", id);
-					item.put("price", price.text());
-					item.put("date", date.text());
-					result.put(id, item);
-					return result;
+					return asMap(id, price.text(), date.text());
 				} catch (IOException e) {
 					throw new RuntimeException(e);
 				}
