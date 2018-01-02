@@ -19,7 +19,7 @@ json.each do |m|
 	end
 end
 
-puts all_hash
+#puts all_hash
 
 print "Update Excel workbook [yN]: "
 if STDIN.gets.chomp == "y" then

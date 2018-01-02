@@ -19,7 +19,7 @@ abstract class Scrapper {
 	protected String today() {
 		return formatDate(new Date());
 	}
-	
+
 	protected Map<String, Map<String, String>> asMap(String id, String price, String date) {
 		Map<String, Map<String, String>> result = new HashMap<>();
 		Map<String, String> item = new HashMap<>();
