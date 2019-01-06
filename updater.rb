@@ -127,7 +127,7 @@ module Updater
     end
 
     # replace % with float
-    i, op, j = value.scan(/([\d,]+)([+\-*\/])?([\d+,]+\%?)?/)[0] #=> ["4037.83", "*", "95%"]
+    i, op, j = value.scan(/([\d,\.]+)([+\-*\/])?([\d+,\.]+\%?)?/)[0] #=> ["4037.83", "*", "95%"]
     if  j =~ /\%$/
       j = "0." + j[0..-2]
       result = i.to_f.send op, j.to_f
