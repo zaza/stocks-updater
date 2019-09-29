@@ -1,12 +1,30 @@
 package com.github.zaza.stockreader;
 
-import java.util.Collections;
-
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestName;
 
 public class StooqScrapperTest extends ScrapperTest {
+
+	@Rule
+	public TestName name = new TestName();
+
 	@Test
-	public void kghm() throws Exception {
-		assertItem(new StooqScrapper(Collections.singletonList("KGH")).collectItems(), "KGH");
+	public void kgh() throws Exception {
+		assertStooqItem();
+	}
+
+	@Test
+	public void pge() throws Exception {
+		assertStooqItem();
+	}
+
+	@Test
+	public void mnc() throws Exception {
+		assertStooqItem();
+	}
+
+	private void assertStooqItem() {
+		assertItem(new StooqScrapper(name.getMethodName()).collectItems(), name.getMethodName());
 	}
 }

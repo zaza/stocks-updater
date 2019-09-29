@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +24,10 @@ public class StooqScrapper extends Scrapper {
 
 	private Collection<String> ids;
 
+	StooqScrapper(String... ids) {
+		this(Arrays.asList(ids));
+	}
+
 	public StooqScrapper(Collection<String> ids) {
 		this.ids = ids;
 	}
@@ -32,16 +37,12 @@ public class StooqScrapper extends Scrapper {
 	}
 
 	private Function<String, Map<String, Map<String, String>>> scrapPage() {
-		return new Function<String, Map<String, Map<String, String>>>() {
-
-			@Override
-			public Map<String, Map<String, String>> apply(String id) {
-				try {
-					Document document = Jsoup.parse(getUrl(id), FIVE_SECONDS);
-					return asMap(id, getPrice(document, id).text(), getDate(document, id).text());
-				} catch (IOException e) {
-					throw new RuntimeException(e);
-				}
+		return id -> {
+			try {
+				Document document = Jsoup.parse(getUrl(id), FIVE_SECONDS);
+				return asMap(id, getPrice(document, id).text(), getDate(document, id).text());
+			} catch (IOException e) {
+				throw new RuntimeException(e);
 			}
 		};
 	}
@@ -55,7 +56,11 @@ public class StooqScrapper extends Scrapper {
 	}
 
 	private Element getPrice(Document document, String id) {
-		Element price = document.getElementById(format("aq_%s_c2|3", id.toLowerCase()));
+		Element price = document.getElementById(format("aq_%s_c1", id.toLowerCase()));
+		if (price == null)
+			price = document.getElementById(format("aq_%s_c2", id.toLowerCase()));
+		if (price == null)
+			price = document.getElementById(format("aq_%s_c3", id.toLowerCase()));
 		checkState(price != null, "no price found for %s", id);
 		return price;
 	}
