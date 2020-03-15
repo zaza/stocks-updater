@@ -24,6 +24,11 @@ public class StooqScrapperTest extends ScrapperTest {
 		assertStooqItem();
 	}
 
+	@Test
+	public void tpe() throws Exception {
+		assertStooqItem();
+	}
+
 	private void assertStooqItem() {
 		assertItem(new StooqScrapper(name.getMethodName()).collectItems(), name.getMethodName());
 	}

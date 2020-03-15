@@ -61,6 +61,8 @@ public class StooqScrapper extends Scrapper {
 			price = document.getElementById(format("aq_%s_c2", id.toLowerCase()));
 		if (price == null)
 			price = document.getElementById(format("aq_%s_c3", id.toLowerCase()));
+		if (price == null)
+			price = document.getElementById(format("aq_%s_c4", id.toLowerCase()));
 		checkState(price != null, "no price found for %s", id);
 		return price;
 	}

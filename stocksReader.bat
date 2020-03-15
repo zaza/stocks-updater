@@ -1,2 +1,5 @@
-@java -cp target\stocks-updater-0.0.1-SNAPSHOT.jar;target\dependency\* com.github.zaza.stockreader.StockReader
-@c:\Apps\rubyinstaller-2.4.1-1-x64\bin\ruby.exe stocksFileReader.rb p:\docs\homebanking\
+@echo off
+call mvn clean package --quiet
+java -cp target\stocks-updater-0.0.1-SNAPSHOT.jar;target\dependency\* com.github.zaza.stockreader.StockReader
+rem install with 'scoop install ruby' followed by 'gem install ftools'
+ruby stocksFileReader.rb v:\docs\homebanking\
