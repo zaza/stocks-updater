@@ -27,7 +27,7 @@ public class ItemsWriter {
 	void write(Collection<Map<String, Map<String, String>>> items) {
 		String json = gson.toJson(items);
 		try {
-			Files.write(json, file, Charsets.UTF_8);
+			Files.asCharSink(file, Charsets.UTF_8).write(json);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
