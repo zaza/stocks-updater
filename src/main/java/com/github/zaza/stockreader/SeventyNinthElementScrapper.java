@@ -1,22 +1,20 @@
 package com.github.zaza.stockreader;
 
+import static com.google.common.base.Preconditions.checkState;
+
 import java.io.IOException;
 import java.net.URI;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 public class SeventyNinthElementScrapper extends Scrapper {
 	private static final URI KRUGERRAND_URI = URI.create(
-			"https://79element.pl/zlote-monety-inwestycyjne-1oz/south-african-gold-krugerrand-1-oz-lata-losowe");
-
-	private static final Pattern PRICE_PATTERN = Pattern.compile("(\\d \\d{3},\\d{2}) zł");
+			"https://79element.pl/product/zlote-monety-inwestycyjne/161-zlota-moneta-lokacyjna-krugerrand-1oz-lata-losowe-o-c/");
 
 	private String id;
 
@@ -31,10 +29,9 @@ public class SeventyNinthElementScrapper extends Scrapper {
 	private String getPrice() {
 		try {
 			Document document = Jsoup.parse(KRUGERRAND_URI.toURL(), FIVE_SECONDS);
-			String price = document.getElementById("our_price_display").text();
-			Matcher m = PRICE_PATTERN.matcher(price);
-			m.find();
-			return m.group(1).replace(',', '.').replace(" ", "");
+			String price = document.getElementsByClass("woocommerce-Price-amount amount").first().text();
+			checkState(price.endsWith("zł"));
+			return price.substring(0, price.length()-"zł".length()).replaceAll("[^\\d]", "");
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
